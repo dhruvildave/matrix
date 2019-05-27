@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+        "ciel_floor.h": "c",
+        "unistd.h": "c",
+        "fcntl.h": "c",
+        "stdio.h": "c",
+        "types.h": "c",
+        "stat.h": "c",
+        "dirent.h": "c",
+        "string.h": "c",
+        "direntry.h": "c",
+        "dir.h": "c",
+        "features.h": "c",
+        "stdbool.h": "c",
+        "limits.h": "c",
+        "uchar.h": "c",
+        "limits": "c",
+        "type_traits": "cpp",
+        "typeinfo": "cpp",
+        "stdlib.h": "c"
+    }
+}

@@ -1,0 +1,26 @@
+{
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "clang build active file",
+      "command": "/usr/bin/clang",
+      "args": [
+        "-g",
+        "${file}",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}.out",
+        "-Wall",
+        "-Wpedantic",
+        "-Wextra"
+      ],
+      "options": {
+        "cwd": "/usr/bin"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ],
+  "version": "2.0.0"
+}
