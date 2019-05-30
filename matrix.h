@@ -34,4 +34,13 @@ void mat_mv(matrix *mat_from, matrix *mat_to);
 // Matrix print
 void print(matrix *mat);
 
+// Matrix addition
+void add(matrix *addend0, matrix *addend1);
+
+// Matrix substraction
+void sub(matrix *subend0, matrix *subend1);
+
+// Matrix transpose
+void transpose(matrix *mat);
+
 #endif // MATRIX_H

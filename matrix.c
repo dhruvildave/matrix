@@ -23,9 +23,11 @@ void mat_dtor(matrix *mat) {
 
 // Matrix allocator
 void mat_alloc(matrix *mat) {
-    mat->mat = (long double **)calloc(mat->row, sizeof(long double *));
-    for (long long i = 0; i < mat->row; ++i) {
-        mat->mat[i] = (long double *)calloc(mat->col, sizeof(long double));
+    if (mat->row >= 0 && mat->col >= 0) {
+        mat->mat = (long double **)calloc(mat->row, sizeof(long double *));
+        for (long long i = 0; i < mat->row; ++i) {
+            mat->mat[i] = (long double *)calloc(mat->col, sizeof(long double));
+        }
     }
 }
 
@@ -82,4 +84,45 @@ void print(matrix *mat) {
                                : printf("\t%Lf\n", mat->mat[i][j]);
         }
     }
+}
+
+// Matrix addition
+void add(matrix *addend0, matrix *addend1) {
+    if (addend0->row == addend1->row && addend0->col == addend1->col) {
+        for (long long i = 0; i < addend0->row; ++i) {
+            for (long long j = 0; j < addend0->col; ++j) {
+                addend0->mat[i][j] += addend1->mat[i][j];
+            }
+        }
+    }
+}
+
+// Matrix substraction
+void sub(matrix *subend0, matrix *subend1) {
+    if (subend0->row == subend1->row && subend0->col == subend1->col) {
+        for (long long i = 0; i < subend0->row; ++i) {
+            for (long long j = 0; j < subend0->col; ++j) {
+                subend0->mat[i][j] -= subend1->mat[i][j];
+            }
+        }
+    }
+}
+
+void transpose(matrix *mat) {
+    matrix new;
+    mat_ctor(&new);
+    mat_mv(mat, &new);
+
+    mat->row = new.col;
+    mat->col = new.row;
+
+    mat_alloc(mat);
+
+    for (long long i = 0; i < new.row; ++i) {
+        for (long long j = 0; j < new.col; ++j) {
+            mat->mat[j][i] = new.mat[i][j];
+        }
+    }
+
+    mat_dtor(&new);
 }

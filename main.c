@@ -20,16 +20,21 @@ int main(void) {
         mat_ctor(&m0);
         mat_init(&m0, NUMBASE);
 
+        // transpose(&m0);
+
         matrix m1;
         mat_ctor(&m1);
-        mat_cp(&m0, &m1);
-        mat_mv(&m0, &m1);
+
+        mat_init(&m1, NUMBASE);
+        add(&m0, &m1);
+        // mat_cp(&m0, &m1);
+        // mat_mv(&m0, &m1);
 
         // mat_init(&m1, NUMBASE);
-        printf("%lld %lld\n", m1.row, m1.col);
-        printf("%lld %lld\n", m0.row, m0.col);
+        // printf("%lld %lld\n", m1.row, m1.col);
+        // printf("%lld %lld\n", m0.row, m0.col);
 
-        print(&m1);
+        // print(&m1);
         print(&m0);
 
         mat_dtor(&m0);
