@@ -109,6 +109,7 @@ void sub(matrix *subend0, matrix *subend1) {
     }
 }
 
+// Matrix transpose
 void transpose(matrix *mat) {
     if (mat->row == mat->col) {
         for (long long i = 0; i < mat->row; ++i) {
