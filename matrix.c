@@ -32,10 +32,11 @@ void mat_alloc(matrix *mat) {
 }
 
 // Matrix initializer
-void mat_init(matrix *mat, const int NUMBASE) {
+void mat_init(matrix *mat) {
     char buf[BUFSIZ] = {0};
     char *rptr = buf;
     char *eptr = NULL;
+    const int NUMBASE = 10;
 
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
@@ -50,8 +51,7 @@ void mat_init(matrix *mat, const int NUMBASE) {
         fgets(buf, BUFSIZ, stdin);
         rptr = buf;
         for (long long j = 0; j < mat->col; ++j) {
-            mat->mat[i][j] =
-                strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+            mat->mat[i][j] = strtold(strtok_r(rptr, " ", &rptr), &eptr);
         }
     }
 }
@@ -109,20 +109,30 @@ void sub(matrix *subend0, matrix *subend1) {
 }
 
 void transpose(matrix *mat) {
-    matrix new;
-    mat_ctor(&new);
-    mat_mv(mat, &new);
-
-    mat->row = new.col;
-    mat->col = new.row;
-
-    mat_alloc(mat);
-
-    for (long long i = 0; i < new.row; ++i) {
-        for (long long j = 0; j < new.col; ++j) {
-            mat->mat[j][i] = new.mat[i][j];
+    if (mat->row == mat->col) {
+        for (long long i = 1; i < mat->row; ++i) {
+            for (long long j = 0; j < i; ++j) {
+                long double temp = mat->mat[i][j];
+                mat->mat[i][j] = mat->mat[j][i];
+                mat->mat[j][i] = temp;
+            }
         }
-    }
+    } else {
+        matrix new;
+        mat_ctor(&new);
+        mat_mv(mat, &new);
 
-    mat_dtor(&new);
+        mat->row = new.col;
+        mat->col = new.row;
+
+        mat_alloc(mat);
+
+        for (long long i = 0; i < new.row; ++i) {
+            for (long long j = 0; j < new.col; ++j) {
+                mat->mat[j][i] = new.mat[i][j];
+            }
+        }
+
+        mat_dtor(&new);
+    }
 }

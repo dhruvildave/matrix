@@ -20,7 +20,7 @@ void mat_ctor(matrix *mat);
 void mat_dtor(matrix *mat);
 
 // Matrix initializer
-void mat_init(matrix *mat, int NUMBASE);
+void mat_init(matrix *mat);
 
 // Matrix allocator
 void mat_alloc(matrix *mat);
