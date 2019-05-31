@@ -34,6 +34,9 @@ void mat_mv(matrix *mat_from, matrix *mat_to);
 // Matrix print
 void print(matrix *mat);
 
+// Matrix pretty print
+void p_print(matrix *mat);
+
 // Matrix addition
 void add(matrix *addend0, matrix *addend1);
 

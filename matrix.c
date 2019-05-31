@@ -5,6 +5,7 @@
 
 #include "matrix.h"
 #include "pch.h"
+#include <math.h>
 
 // Matrix constructor
 void mat_ctor(matrix *mat) {
@@ -77,12 +78,67 @@ void mat_mv(matrix *mat_from, matrix *mat_to) {
     mat_dtor(mat_from);
 }
 
-// Matrix print
-void print(matrix *mat) {
+// Checks if all the elements of matrix are integers
+static int is_integer_matrix(matrix *mat) {
     for (long long i = 0; i < mat->row; ++i) {
         for (long long j = 0; j < mat->col; ++j) {
-            (j < mat->col - 1) ? printf("\t%Lf", mat->mat[i][j])
-                               : printf("\t%Lf\n", mat->mat[i][j]);
+            if (mat->mat[i][j] - floorl(mat->mat[i][j]) != 0) {
+                return 0;
+            }
+        }
+    }
+
+    return 1;
+}
+
+// Matrix print
+void print(matrix *mat) {
+    if (is_integer_matrix(mat)) {
+        printf("[");
+        for (long long i = 0; i < mat->row; ++i) {
+            printf("[");
+            for (long long j = 0; j < mat->col; ++j) {
+                (j < mat->col - 1) ? printf("%.0Lf, ", mat->mat[i][j])
+                                   : printf("%.0Lf]", mat->mat[i][j]);
+            }
+
+            if (i < mat->row - 1) {
+                printf(", ");
+            }
+        }
+        printf("]\n");
+    } else {
+        printf("[");
+        for (long long i = 0; i < mat->row; ++i) {
+            printf("[");
+            for (long long j = 0; j < mat->col; ++j) {
+                (j < mat->col - 1) ? printf("%.2Lf, ", mat->mat[i][j])
+                                   : printf("%.2Lf]", mat->mat[i][j]);
+            }
+
+            if (i < mat->row - 1) {
+                printf(", ");
+            }
+        }
+        printf("]\n");
+    }
+}
+
+// Matrix preety print
+void p_print(matrix *mat) {
+    if (is_integer_matrix(mat)) {
+        for (long long i = 0; i < mat->row; ++i) {
+            for (long long j = 0; j < mat->col; ++j) {
+                (j < mat->col - 1) ? printf("\t%.0Lf", mat->mat[i][j])
+                                   : printf("\t%.0Lf\n", mat->mat[i][j]);
+            }
+        }
+    } else {
+        for (long long i = 0; i < mat->row; ++i) {
+            for (long long j = 0; j < mat->col; ++j) {
+                (j < mat->col - 1) ? printf("\t%.2Lf", mat->mat[i][j])
+                                   : printf("\t%.2Lf\n", mat->mat[i][j]);
+            }
         }
     }
 }

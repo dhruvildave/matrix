@@ -17,6 +17,7 @@
         "limits": "c",
         "type_traits": "cpp",
         "typeinfo": "cpp",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "math.h": "c"
     }
 }
