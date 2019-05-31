@@ -208,9 +208,10 @@ void scalar_mul(matrix *mat, long long num) {
 
 // Make an identity matrix
 void init_identity_matrix(matrix *mat, long long num) {
-    mat_dtor(mat);
-    mat_ctor(mat);
     if (num > 0) {
+        mat_dtor(mat);
+        mat_ctor(mat);
+
         mat->row = mat->col = num;
 
         mat_alloc(mat);
