@@ -194,3 +194,14 @@ void transpose(matrix *mat) {
         mat_dtor(&new);
     }
 }
+
+// Matrix scalar multiplication
+void scalar_mul(matrix *mat, long long num) {
+    if (mat->row >= 0 && mat->col >= 0 && mat->mat != NULL) {
+        for (long long i = 0; i < mat->row; ++i) {
+            for (long long j = 0; j < mat->col; ++j) {
+                mat->mat[i][j] *= num;
+            }
+        }
+    }
+}

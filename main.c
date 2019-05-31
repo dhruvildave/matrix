@@ -20,6 +20,10 @@ int main(void) {
         mat_ctor(&m0);
         mat_init(&m0);
 
+        fgets(buf, BUFSIZ, stdin);
+        rptr = buf;
+        long long num = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+        scalar_mul(&m0, num);
         transpose(&m0);
 
         // matrix m1;
@@ -35,7 +39,7 @@ int main(void) {
         // printf("%lld %lld\n", m0.row, m0.col);
 
         // print(&m1);
-        print(&m0);
+        p_print(&m0);
 
         // mat_dtor(&m1);
         mat_dtor(&m0);
