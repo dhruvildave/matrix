@@ -22,5 +22,3 @@ make
 ./main.out
 ```
 ---
-
-### To run in Windows, edit the *makefile* and change *CC = clang* to *CC = gcc before the third step*
