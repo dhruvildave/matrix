@@ -18,6 +18,7 @@ void mat_dtor(matrix *mat) {
     if (mat->col >= 0 && mat->row >= 0) {
         mat->col = mat->row = -1;
         free(mat->mat);
+        mat->mat = NULL;
     }
 }
 
