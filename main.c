@@ -18,13 +18,13 @@ int main(void) {
     for (long i = 0; i < test; ++i) {
         matrix m0;
         mat_ctor(&m0);
-        mat_init(&m0);
+        // mat_init(&m0);
 
         fgets(buf, BUFSIZ, stdin);
         rptr = buf;
         long long num = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-        scalar_mul(&m0, num);
-        transpose(&m0);
+        init_identity_matrix(&m0, num);
+        // transpose(&m0);
 
         // matrix m1;
         // mat_ctor(&m1);

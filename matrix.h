@@ -49,4 +49,7 @@ void transpose(matrix *mat);
 // Matrix scalar multiplication
 void scalar_mul(matrix *mat, long long num);
 
+// Make an identity matrix
+void init_identity_matrix(matrix *mat, long long num);
+
 #endif // MATRIX_H
