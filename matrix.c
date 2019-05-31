@@ -110,7 +110,7 @@ void sub(matrix *subend0, matrix *subend1) {
 
 void transpose(matrix *mat) {
     if (mat->row == mat->col) {
-        for (long long i = 1; i < mat->row; ++i) {
+        for (long long i = 0; i < mat->row; ++i) {
             for (long long j = 0; j < i; ++j) {
                 long double temp = mat->mat[i][j];
                 mat->mat[i][j] = mat->mat[j][i];
