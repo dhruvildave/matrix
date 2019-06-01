@@ -152,6 +152,7 @@ void p_print(matrix *mat) {
     }
 }
 
+// Checks if the matrix is square or not
 static int is_square_matrix(matrix *mat) {
     if (is_valid_matrix(mat)) {
         if (mat->col == mat->row) {
@@ -241,6 +242,7 @@ void init_identity_matrix(matrix *mat, long long num) {
     }
 }
 
+// Multiply one matrix with another
 void matrix_multiply(matrix *A, matrix *B) {
     if (is_valid_matrix(A) && is_valid_matrix(B) && A->col == B->row) {
         matrix temp;
