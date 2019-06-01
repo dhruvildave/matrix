@@ -3,8 +3,7 @@
 // Mon 27 May 2019 02:07:07 PM IST
 // main.c
 
-#include "matrix.h"
-#include "pch.h"
+#include "graph.h"
 
 int main(void) {
     char buf[BUFSIZ] = {0};
@@ -16,33 +15,13 @@ int main(void) {
     rptr = buf;
     long test = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
     for (long i = 0; i < test; ++i) {
-        matrix m0;
-        mat_ctor(&m0);
-        mat_init(&m0);
+        matrix graph;
+        mat_ctor(&graph);
+        init_undirected_graph(&graph);
 
-        // fgets(buf, BUFSIZ, stdin);
-        // rptr = buf;
-        // long long num = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-        // init_identity_matrix(&m0, num);
-        // transpose(&m0);
+        p_print(&graph);
 
-        matrix m1;
-        mat_ctor(&m1);
-
-        mat_init(&m1);
-        matrix_multiply(&m0, &m1);
-        // add(&m0, &m1);
-        // mat_cp(&m0, &m1);
-        // mat_mv(&m0, &m1);
-
-        // printf("%lld %lld\n", m1.row, m1.col);
-        // printf("%lld %lld\n", m0.row, m0.col);
-
-        // print(&m1);
-        p_print(&m0);
-
-        mat_dtor(&m1);
-        mat_dtor(&m0);
+        mat_dtor(&graph);
     }
 
     return 0;
