@@ -6,5 +6,6 @@
 #include "pch.h"
 
 void init_undirected_graph(matrix *mat);
+void init_directed_graph(matrix *mat);
 
 #endif // GRAPH_H

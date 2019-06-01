@@ -17,7 +17,7 @@ int main(void) {
     for (long i = 0; i < test; ++i) {
         matrix graph;
         mat_ctor(&graph);
-        init_undirected_graph(&graph);
+        init_directed_graph(&graph);
 
         p_print(&graph);
 
