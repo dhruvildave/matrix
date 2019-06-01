@@ -18,30 +18,30 @@ int main(void) {
     for (long i = 0; i < test; ++i) {
         matrix m0;
         mat_ctor(&m0);
-        // mat_init(&m0);
+        mat_init(&m0);
 
-        fgets(buf, BUFSIZ, stdin);
-        rptr = buf;
-        long long num = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-        init_identity_matrix(&m0, num);
+        // fgets(buf, BUFSIZ, stdin);
+        // rptr = buf;
+        // long long num = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+        // init_identity_matrix(&m0, num);
         // transpose(&m0);
 
-        // matrix m1;
-        // mat_ctor(&m1);
+        matrix m1;
+        mat_ctor(&m1);
 
-        // mat_init(&m1, NUMBASE);
+        mat_init(&m1);
+        matrix_multiply(&m0, &m1);
         // add(&m0, &m1);
         // mat_cp(&m0, &m1);
         // mat_mv(&m0, &m1);
 
-        // mat_init(&m1, NUMBASE);
         // printf("%lld %lld\n", m1.row, m1.col);
         // printf("%lld %lld\n", m0.row, m0.col);
 
         // print(&m1);
         p_print(&m0);
 
-        // mat_dtor(&m1);
+        mat_dtor(&m1);
         mat_dtor(&m0);
     }
 

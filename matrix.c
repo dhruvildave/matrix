@@ -58,6 +58,15 @@ void mat_init(matrix *mat) {
     }
 }
 
+// Checks the validity of matrix
+static int is_valid_matrix(matrix *mat) {
+    if (mat->row > 0 && mat->col > 0 && mat->mat != NULL) {
+        return 1;
+    }
+
+    return 0;
+}
+
 // Matrix copy
 void mat_cp(matrix *mat_from, matrix *mat_to) {
     mat_to->row = mat_from->row;
@@ -124,7 +133,7 @@ void print(matrix *mat) {
     }
 }
 
-// Matrix preety print
+// Matrix pretty print
 void p_print(matrix *mat) {
     if (is_integer_matrix(mat)) {
         for (long long i = 0; i < mat->row; ++i) {
@@ -141,6 +150,16 @@ void p_print(matrix *mat) {
             }
         }
     }
+}
+
+static int is_square_matrix(matrix *mat) {
+    if (is_valid_matrix(mat)) {
+        if (mat->col == mat->row) {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 // Matrix addition
@@ -167,7 +186,7 @@ void sub(matrix *subend0, matrix *subend1) {
 
 // Matrix transpose
 void transpose(matrix *mat) {
-    if (mat->row == mat->col) {
+    if (is_square_matrix(mat)) {
         for (long long i = 0; i < mat->row; ++i) {
             for (long long j = 0; j < i; ++j) {
                 long double temp = mat->mat[i][j];
@@ -197,7 +216,7 @@ void transpose(matrix *mat) {
 
 // Matrix scalar multiplication
 void scalar_mul(matrix *mat, long long num) {
-    if (mat->row >= 0 && mat->col >= 0 && mat->mat != NULL) {
+    if (is_valid_matrix(mat)) {
         for (long long i = 0; i < mat->row; ++i) {
             for (long long j = 0; j < mat->col; ++j) {
                 mat->mat[i][j] *= num;
@@ -219,5 +238,29 @@ void init_identity_matrix(matrix *mat, long long num) {
         for (long long i = 0; i < mat->row; ++i) {
             mat->mat[i][i] = 1;
         }
+    }
+}
+
+void matrix_multiply(matrix *A, matrix *B) {
+    if (A->col == B->row) {
+        matrix temp;
+        mat_ctor(&temp);
+        mat_mv(A, &temp);
+
+        A->row = temp.row;
+        A->col = B->col;
+
+        mat_alloc(A);
+        for (long long i = 0; i < temp.row; ++i) {
+            for (long long j = 0; j < B->col; ++j) {
+                long double sum = 0;
+                for (long long k = 0; k < B->row; ++k) {
+                    sum += temp.mat[i][k] * B->mat[k][j];
+                }
+                A->mat[i][j] = sum;
+            }
+        }
+
+        mat_dtor(&temp);
     }
 }
