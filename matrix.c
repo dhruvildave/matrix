@@ -242,7 +242,7 @@ void init_identity_matrix(matrix *mat, long long num) {
 }
 
 void matrix_multiply(matrix *A, matrix *B) {
-    if (A->col == B->row) {
+    if (is_valid_matrix(A) && is_valid_matrix(B) && A->col == B->row) {
         matrix temp;
         mat_ctor(&temp);
         mat_mv(A, &temp);
