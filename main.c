@@ -17,9 +17,9 @@ int main(void) {
     for (long i = 0; i < test; ++i) {
         matrix graph;
         mat_ctor(&graph);
-        init_directed_graph(&graph);
+        mat_init(&graph);
 
-        p_print(&graph);
+        printf("%Lf\n", det(&graph));
 
         mat_dtor(&graph);
     }

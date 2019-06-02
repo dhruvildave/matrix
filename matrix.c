@@ -154,10 +154,8 @@ void p_print(matrix *mat) {
 
 // Checks if the matrix is square or not
 static int is_square_matrix(matrix *mat) {
-    if (is_valid_matrix(mat)) {
-        if (mat->col == mat->row) {
-            return 1;
-        }
+    if (is_valid_matrix(mat) && mat->col == mat->row) {
+        return 1;
     }
 
     return 0;
@@ -265,4 +263,75 @@ void matrix_multiply(matrix *A, matrix *B) {
 
         mat_dtor(&temp);
     }
+}
+
+static void swap(long double *x, long double *y) {
+    long double temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+long double det(matrix *mat) {
+    if (is_square_matrix(mat) == 0) {
+        return 0;
+    }
+
+    long double det = 1;
+    long double total = 1; // Initialize result
+    // temporary array for storing row
+    // long double temp[mat->row];
+
+    // loop for traversing the diagonal elements
+    for (long long i = 0; i < mat->row; i++) {
+        long long index = i; // intialize the index
+
+        // finding the index which has non zero value
+        while (index < mat->row && mat->mat[index][i] == 0) {
+            index++;
+        }
+
+        // if there is non zero element
+        if (index == mat->row) {
+            continue; // the determinant of matrix as zero
+        }
+
+        if (index != i) {
+            // loop for swaping the diagonal element row and index row
+            for (long long j = 0; j < mat->row; j++) {
+                swap(&mat->mat[index][j], &mat->mat[i][j]);
+
+                // determinant sign changes when we shift rows
+                // go through determinant properties
+                det *= pow(-1, index - i);
+            }
+        }
+
+        long double temp[mat->row];
+        // storing the values of diagonal row elements
+        for (long long j = 0; j < mat->row; j++) {
+            temp[j] = mat->mat[i][j];
+        }
+
+        // traversing every row below the diagonal element
+        for (long long j = i + 1; j < mat->row; j++) {
+            long double num1 = temp[i];        // value of diagonal element
+            long double num2 = mat->mat[j][i]; // value of next row element
+
+            // traversing every column of row and multiplying to every row
+            for (long long k = 0; k < mat->row; k++) {
+                // multiplying to make the diagonal
+                // element and next row element equal
+                mat->mat[j][k] = (num1 * mat->mat[j][k]) - (num2 * temp[k]);
+            }
+
+            total *= num1; // Det(kA)=kDet(A);
+        }
+    }
+
+    // multiplying the diagonal elements to get determinant
+    for (long long i = 0; i < mat->row; i++) {
+        det *= mat->mat[i][i];
+    }
+
+    return (det / -total); // Det(kA)/k=Det(A);}
 }

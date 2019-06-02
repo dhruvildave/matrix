@@ -55,4 +55,7 @@ void matrix_multiply(matrix *A, matrix *B);
 // Make an identity matrix
 void init_identity_matrix(matrix *mat, long long num);
 
+// Find determinant of the square matrix
+long double det(matrix *mat);
+
 #endif // MATRIX_H
