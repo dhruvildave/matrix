@@ -20,7 +20,7 @@ int main(void) {
         mat_init(&graph);
 
         printf("%Lf\n", det(&graph));
-
+        print(&graph);
         mat_dtor(&graph);
     }
 
