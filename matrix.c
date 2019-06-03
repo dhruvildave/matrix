@@ -265,12 +265,14 @@ void matrix_multiply(matrix *A, matrix *B) {
     }
 }
 
+// Swap two elements in place
 static void swap(long double *x, long double *y) {
     long double temp = *x;
     *x = *y;
     *y = temp;
 }
 
+// Find determinant of the square matrix
 long double det(matrix *mat) {
     if (is_square_matrix(mat) == 0) {
         return 0;
@@ -282,8 +284,6 @@ long double det(matrix *mat) {
 
     long double det = 1;
     long double total = 1; // Initialize result
-    // temporary array for storing row
-    // long double temp[mat->row];
 
     // loop for traversing the diagonal elements
     for (long long i = 0; i < new.row; i++) {
@@ -328,7 +328,7 @@ long double det(matrix *mat) {
                 new.mat[j][k] = (num1 * new.mat[j][k]) - (num2 * temp[k]);
             }
 
-            total *= num1; // Det(kA)=kDet(A);
+            total *= num1; // Det(kA)=kDet(A)
         }
     }
 
@@ -339,5 +339,5 @@ long double det(matrix *mat) {
 
     mat_dtor(&new);
 
-    return (det / -total); // Det(kA)/k=Det(A);}
+    return (det / -total); // Det(kA)/k=Det(A)
 }

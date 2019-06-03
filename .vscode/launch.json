@@ -9,10 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/main.x86_64",
-            "args": [
-                "<",
-                "test.txt"
-            ],
+            "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
