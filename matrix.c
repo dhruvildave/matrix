@@ -40,6 +40,7 @@ void mat_init(matrix *mat) {
     char *eptr = NULL;
     const int NUMBASE = 10;
 
+    printf("Enter row and column of matrix seperated by space: ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     mat->row = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
@@ -102,6 +103,7 @@ static int is_integer_matrix(matrix *mat) {
 
 // Matrix print
 void print(matrix *mat) {
+    printf("\n");
     if (is_integer_matrix(mat)) {
         printf("[");
         for (long long i = 0; i < mat->row; ++i) {
@@ -136,6 +138,7 @@ void print(matrix *mat) {
 
 // Matrix pretty print
 void p_print(matrix *mat) {
+    printf("\n");
     if (is_integer_matrix(mat)) {
         for (long long i = 0; i < mat->row; ++i) {
             for (long long j = 0; j < mat->col; ++j) {
@@ -288,7 +291,7 @@ static void get_cofactor(matrix *mat, matrix *temp, long long p, long long q) {
     }
 }
 
-// Recursive function for finding determinant of matrix.
+// Find determinant of the square matrix
 long double det(matrix *mat) {
     if (is_square_matrix(mat) == 0 || is_valid_matrix(mat) == 0) {
         return 0;

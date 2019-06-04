@@ -11,6 +11,7 @@ int main(void) {
     char *eptr = NULL;
     const int NUMBASE = 10;
 
+    printf("Enter the number of testcases: ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     long test = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
