@@ -214,7 +214,7 @@ void transpose(matrix *mat) {
 }
 
 // Matrix scalar multiplication
-void scalar_mul(matrix *mat, long long num) {
+void scalar_mul(matrix *mat, long double num) {
     if (is_valid_matrix(mat)) {
         for (long long i = 0; i < mat->row; ++i) {
             for (long long j = 0; j < mat->col; ++j) {

@@ -47,7 +47,7 @@ void sub(matrix *subend0, matrix *subend1);
 void transpose(matrix *mat);
 
 // Matrix scalar multiplication
-void scalar_mul(matrix *mat, long long num);
+void scalar_mul(matrix *mat, long double num);
 
 // Matrix multiplication
 void matrix_multiply(matrix *A, matrix *B);
