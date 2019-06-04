@@ -19,6 +19,6 @@ make
 ```
 
 ```bash
-./main.out
+./main.x86_64
 ```
 ---

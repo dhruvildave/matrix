@@ -270,16 +270,11 @@ static void get_cofactor(matrix *mat, matrix *temp, long long p, long long q) {
     long long i = 0;
     long long j = 0;
 
-    // Looping for each element of the matrix
     for (long long row = 0; row < mat->row; row++) {
         for (long long col = 0; col < mat->col; col++) {
-            // Copying into temporary matrix only those element
-            // which are not in given row and column
             if (row != p && col != q) {
                 temp->mat[i][j++] = mat->mat[row][col];
 
-                // Row is filled, so increase row index and
-                // reset col index
                 if (j == mat->row - 1) {
                     j = 0;
                     i++;
@@ -289,10 +284,9 @@ static void get_cofactor(matrix *mat, matrix *temp, long long p, long long q) {
     }
 }
 
-/* Recursive function for finding determinant of matrix.
-n is current dimension of mat[][]. */
+// Recursive function for finding determinant of matrix.
 long double det(matrix *mat) {
-    long double D = 0; // Initialize result
+    long double D = 0;
 
     // Base case : if matrix contains single element
     if (mat->row == 1) {
@@ -307,13 +301,11 @@ long double det(matrix *mat) {
 
     int sign = 1;
 
-    // Iterate for each element of first row
     for (long long f = 0; f < mat->row; f++) {
         get_cofactor(mat, &temp, 0, f); // Getting Cofactor of mat[0][f]
         D += sign * mat->mat[0][f] * det(&temp);
 
-        // terms are to be added with alternate sign
-        sign = -sign;
+        sign = -sign; // terms are to be added with alternate sign
     }
 
     mat_dtor(&temp);
