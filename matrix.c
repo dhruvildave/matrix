@@ -195,24 +195,26 @@ void transpose(matrix *mat) {
                 mat->mat[j][i] = temp;
             }
         }
-    } else {
-        matrix new;
-        mat_ctor(&new);
-        mat_mv(mat, &new);
 
-        mat->row = new.col;
-        mat->col = new.row;
-
-        mat_alloc(mat);
-
-        for (long long i = 0; i < new.row; ++i) {
-            for (long long j = 0; j < new.col; ++j) {
-                mat->mat[j][i] = new.mat[i][j];
-            }
-        }
-
-        mat_dtor(&new);
+        return;
     }
+
+    matrix new;
+    mat_ctor(&new);
+    mat_mv(mat, &new);
+
+    mat->row = new.col;
+    mat->col = new.row;
+
+    mat_alloc(mat);
+
+    for (long long i = 0; i < new.row; ++i) {
+        for (long long j = 0; j < new.col; ++j) {
+            mat->mat[j][i] = new.mat[i][j];
+        }
+    }
+
+    mat_dtor(&new);
 }
 
 // Matrix scalar multiplication
@@ -288,6 +290,10 @@ static void get_cofactor(matrix *mat, matrix *temp, long long p, long long q) {
 
 // Recursive function for finding determinant of matrix.
 long double det(matrix *mat) {
+    if (is_square_matrix(mat) == 0 || is_valid_matrix(mat) == 0) {
+        return 0;
+    }
+
     long double D = 0;
 
     // Base case : if matrix contains single element
