@@ -25,16 +25,20 @@ void init_graph(matrix *mat) {
             rptr = buf;
             long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
             long long c = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-            mat->mat[r][c] = 1;
+            if (r < mat->row && c < mat->row) {
+                mat->mat[r][c] = 1;
+            }
         }
-    } else {
+    } else if (is_directed == 0) {
         for (long long i = 0;
              i < mat->col * mat->row && fgets(buf, BUFSIZ, stdin); ++i) {
             rptr = buf;
             long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
             long long c = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-            mat->mat[r][c] = 1;
-            mat->mat[c][r] = 1;
+            if (r < mat->row && c < mat->row) {
+                mat->mat[r][c] = 1;
+                mat->mat[c][r] = 1;
+            }
         }
     }
 }

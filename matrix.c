@@ -116,21 +116,22 @@ void print(matrix *mat) {
             }
         }
         printf("]\n");
-    } else {
-        printf("[");
-        for (long long i = 0; i < mat->row; ++i) {
-            printf("[");
-            for (long long j = 0; j < mat->col; ++j) {
-                (j < mat->col - 1) ? printf("%.2Lf, ", mat->mat[i][j])
-                                   : printf("%.2Lf]", mat->mat[i][j]);
-            }
-
-            if (i < mat->row - 1) {
-                printf(", ");
-            }
-        }
-        printf("]\n");
+        return;
     }
+
+    printf("[");
+    for (long long i = 0; i < mat->row; ++i) {
+        printf("[");
+        for (long long j = 0; j < mat->col; ++j) {
+            (j < mat->col - 1) ? printf("%.2Lf, ", mat->mat[i][j])
+                               : printf("%.2Lf]", mat->mat[i][j]);
+        }
+
+        if (i < mat->row - 1) {
+            printf(", ");
+        }
+    }
+    printf("]\n");
 }
 
 // Matrix pretty print
@@ -142,12 +143,13 @@ void p_print(matrix *mat) {
                                    : printf("\t%.0Lf\n", mat->mat[i][j]);
             }
         }
-    } else {
-        for (long long i = 0; i < mat->row; ++i) {
-            for (long long j = 0; j < mat->col; ++j) {
-                (j < mat->col - 1) ? printf("\t%.2Lf", mat->mat[i][j])
-                                   : printf("\t%.2Lf\n", mat->mat[i][j]);
-            }
+        return;
+    }
+
+    for (long long i = 0; i < mat->row; ++i) {
+        for (long long j = 0; j < mat->col; ++j) {
+            (j < mat->col - 1) ? printf("\t%.2Lf", mat->mat[i][j])
+                               : printf("\t%.2Lf\n", mat->mat[i][j]);
         }
     }
 }
