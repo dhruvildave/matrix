@@ -265,79 +265,58 @@ void matrix_multiply(matrix *A, matrix *B) {
     }
 }
 
-// Swap two elements in place
-static void swap(long double *x, long double *y) {
-    long double temp = *x;
-    *x = *y;
-    *y = temp;
+// Function to get cofactor of mat[p][q] in temp
+static void get_cofactor(matrix *mat, matrix *temp, long long p, long long q) {
+    long long i = 0;
+    long long j = 0;
+
+    // Looping for each element of the matrix
+    for (long long row = 0; row < mat->row; row++) {
+        for (long long col = 0; col < mat->col; col++) {
+            // Copying into temporary matrix only those element
+            // which are not in given row and column
+            if (row != p && col != q) {
+                temp->mat[i][j++] = mat->mat[row][col];
+
+                // Row is filled, so increase row index and
+                // reset col index
+                if (j == mat->row - 1) {
+                    j = 0;
+                    i++;
+                }
+            }
+        }
+    }
 }
 
-// Find determinant of the square matrix
+/* Recursive function for finding determinant of matrix.
+n is current dimension of mat[][]. */
 long double det(matrix *mat) {
-    if (is_square_matrix(mat) == 0) {
-        return 0;
+    long double D = 0; // Initialize result
+
+    // Base case : if matrix contains single element
+    if (mat->row == 1) {
+        return mat->mat[0][0];
     }
 
-    matrix new;
-    mat_ctor(&new);
-    mat_cp(mat, &new);
+    matrix temp;
+    mat_ctor(&temp);
 
-    long double det = 1;
-    long double total = 1; // Initialize result
+    temp.row = temp.col = mat->row - 1;
+    mat_alloc(&temp);
 
-    // loop for traversing the diagonal elements
-    for (long long i = 0; i < new.row; i++) {
-        long long index = i; // intialize the index
+    int sign = 1;
 
-        // finding the index which has non zero value
-        while (index < new.row &&new.mat[index][i] == 0) {
-            index++;
-        }
+    // Iterate for each element of first row
+    for (long long f = 0; f < mat->row; f++) {
+        get_cofactor(mat, &temp, 0, f); // Getting Cofactor of mat[0][f]
+        D += sign * mat->mat[0][f] * det(&temp);
 
-        // if there is non zero element
-        if (index == new.row) {
-            continue; // the determinant of matrix as zero
-        }
-
-        if (index != i) {
-            // loop for swaping the diagonal element row and index row
-            for (long long j = 0; j < new.row; j++) {
-                swap(&new.mat[index][j], &new.mat[i][j]);
-
-                // determinant sign changes when we shift rows
-                // go through determinant properties
-                det *= pow(-1, index - i);
-            }
-        }
-
-        long double temp[new.row];
-        // storing the values of diagonal row elements
-        for (long long j = 0; j < new.row; j++) {
-            temp[j] = new.mat[i][j];
-        }
-
-        // traversing every row below the diagonal element
-        for (long long j = i + 1; j < new.row; j++) {
-            long double num1 = temp[i];       // value of diagonal element
-            long double num2 = new.mat[j][i]; // value of next row element
-
-            // traversing every column of row and multiplying to every row
-            for (long long k = 0; k < new.row; k++) {
-                // multiplying to make the diagonal
-                // element and next row element equal
-                new.mat[j][k] = (num1 * new.mat[j][k]) - (num2 * temp[k]);
-            }
-
-            total *= num1; // Det(kA)=kDet(A)
-        }
+        // terms are to be added with alternate sign
+        sign = -sign;
     }
 
-    // multiplying the diagonal elements to get determinant
-    for (long long i = 0; i < new.row; i++) {
-        det *= new.mat[i][i];
-    }
+    mat_dtor(&temp);
 
-    mat_dtor(&new);
-
-    return (det / -total); // Det(kA)/k=Det(A)
+    return D;
 }
