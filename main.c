@@ -16,12 +16,13 @@ int main(void) {
     rptr = buf;
     long test = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
     for (long i = 0; i < test; ++i) {
-        matrix graph;
-        mat_ctor(&graph);
-        init_graph(&graph);
+        graph g;
+        graph_ctor(&g);
+        graph_init(&g);
 
-        p_print(&graph);
-        mat_dtor(&graph);
+        graph_pprint(&g);
+
+        graph_dtor(&g);
     }
 
     return 0;

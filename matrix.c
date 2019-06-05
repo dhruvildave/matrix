@@ -102,7 +102,7 @@ static int is_integer_matrix(matrix *mat) {
 }
 
 // Matrix print
-void print(matrix *mat) {
+void mat_print(matrix *mat) {
     printf("\n");
     if (is_integer_matrix(mat)) {
         printf("[");
@@ -137,7 +137,7 @@ void print(matrix *mat) {
 }
 
 // Matrix pretty print
-void p_print(matrix *mat) {
+void mat_pprint(matrix *mat) {
     printf("\n");
     if (is_integer_matrix(mat)) {
         for (long long i = 0; i < mat->row; ++i) {

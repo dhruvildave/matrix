@@ -32,10 +32,10 @@ void mat_cp(matrix *mat_from, matrix *mat_to);
 void mat_mv(matrix *mat_from, matrix *mat_to);
 
 // Matrix print
-void print(matrix *mat);
+void mat_print(matrix *mat);
 
 // Matrix pretty print
-void p_print(matrix *mat);
+void mat_pprint(matrix *mat);
 
 // Matrix addition
 void add(matrix *addend0, matrix *addend1);
