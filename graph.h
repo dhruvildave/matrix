@@ -26,9 +26,9 @@ void graph_dtor(graph *gph);
 void graph_init(graph *gph);
 
 // Graph print
-void graph_print(graph *graph);
+void graph_print(graph *gph);
 
 // Graph pretty print
-void graph_pprint(graph *graph);
+void graph_pprint(graph *gph);
 
 #endif // GRAPH_H
