@@ -1,5 +1,5 @@
 # matrix
-C Language implementation of Matrix and implementation of Matrix Algebra
+C Language implementation of Matrix and Graph and implementation of Matrix Algebra and Graph Theory
 ---
 
 ## To compile and run the project (Linux):
