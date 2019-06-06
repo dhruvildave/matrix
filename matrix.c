@@ -130,8 +130,8 @@ void mat_print(matrix *mat) {
     for (long long i = 0; i < mat->row; ++i) {
         printf("[");
         for (long long j = 0; j < mat->col; ++j) {
-            (j < mat->col - 1) ? printf("%.2Lf, ", mat->mat[i][j])
-                               : printf("%.2Lf]", mat->mat[i][j]);
+            (j < mat->col - 1) ? printf("%Lf, ", mat->mat[i][j])
+                               : printf("%Lf]", mat->mat[i][j]);
         }
 
         if (i < mat->row - 1) {
@@ -156,8 +156,8 @@ void mat_pprint(matrix *mat) {
 
     for (long long i = 0; i < mat->row; ++i) {
         for (long long j = 0; j < mat->col; ++j) {
-            (j < mat->col - 1) ? printf("\t%.2Lf", mat->mat[i][j])
-                               : printf("\t%.2Lf\n", mat->mat[i][j]);
+            (j < mat->col - 1) ? printf("\t%Lf", mat->mat[i][j])
+                               : printf("\t%Lf\n", mat->mat[i][j]);
         }
     }
 }
@@ -327,4 +327,73 @@ long double det(matrix *mat) {
     mat_dtor(&temp);
 
     return D;
+}
+
+// Finds the adjoint of mat and store in adj
+void mat_adj(matrix *mat, matrix *adj) {
+    if (is_square_matrix(mat) == 0) {
+        return;
+    }
+
+    mat_dtor(adj);
+    mat_ctor(adj);
+
+    adj->col = adj->row = mat->row;
+
+    mat_alloc(adj);
+
+    for (long long i = 0; i < mat->row; ++i) {
+        for (long long j = 0; j < mat->col; ++j) {
+            matrix temp;
+            mat_ctor(&temp);
+            temp.row = temp.col = mat->row - 1;
+            mat_alloc(&temp);
+
+            get_cofactor(mat, &temp, i, j);
+            int sign = ((i + j) % 2 == 0) ? 1 : -1;
+
+            adj->mat[i][j] = sign * det(&temp);
+
+            mat_dtor(&temp);
+        }
+    }
+
+    transpose(adj);
+}
+
+// Finds the inverse of the mat and stores in inv
+void mat_inv(matrix *mat, matrix *inv) {
+    long double d = det(mat);
+    if (d == 0) {
+        return;
+    }
+
+    mat_dtor(inv);
+    mat_ctor(inv);
+
+    inv->col = inv->row = mat->row;
+    mat_alloc(inv);
+
+    matrix adj;
+    mat_adj(mat, &adj);
+
+    scalar_mul(&adj, 1 / d);
+
+    mat_mv(&adj, inv);
+}
+
+// Checks the equality of matrix A and B
+int matrix_equality(matrix *A, matrix *B) {
+    if (is_valid_matrix(A) && is_valid_matrix(B) && A->row == B->row &&
+        A->col == B->col) {
+        for (long long i = 0; i < A->row; ++i) {
+            for (long long j = 0; j < A->col; ++j) {
+                if (A->mat[i][j] != B->mat[i][j]) {
+                    return 0;
+                }
+            }
+        }
+    }
+
+    return 1;
 }

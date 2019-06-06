@@ -58,4 +58,13 @@ void init_identity_matrix(matrix *mat, long long num);
 // Find determinant of the square matrix
 long double det(matrix *mat);
 
+// Finds the adjoint of mat and store in adj
+void adj(matrix *mat, matrix *adj);
+
+// Finds the inverse of the mat and stores in inv
+void mat_inv(matrix *mat, matrix *inv);
+
+// Checks the equality of matrix A and B
+int matrix_equality(matrix *A, matrix *B);
+
 #endif // MATRIX_H
