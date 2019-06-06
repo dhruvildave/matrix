@@ -12,6 +12,7 @@ void graph_ctor(graph *gph) {
     gph->no_edge = -1;
     gph->no_vertex = -1;
     gph->multiple_edges = -1;
+    gph->is_simple = -1;
 
     mat_ctor(&gph->adj_mat);
 }
@@ -23,6 +24,7 @@ void graph_dtor(graph *gph) {
     gph->no_edge = -1;
     gph->no_vertex = -1;
     gph->multiple_edges = -1;
+    gph->is_simple = -1;
 
     mat_dtor(&gph->adj_mat);
 }
@@ -40,11 +42,18 @@ void graph_init(graph *gph) {
     gph->no_vertex = gph->adj_mat.row = gph->adj_mat.col =
         strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
 
-    gph->no_edge = gph->multiple_edges = gph->has_loops = 0;
+    gph->no_edge = gph->multiple_edges = gph->has_loops = gph->is_simple = 0;
     printf("Is the graph directed? (0 / 1) : ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     gph->is_directed = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+
+    if (gph->is_directed == 0) {
+        printf("Is the graph simple? (0 / 1) : ");
+        fgets(buf, BUFSIZ, stdin);
+        rptr = buf;
+        gph->is_simple = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+    }
 
     if (gph->no_vertex > 0) {
         mat_alloc(&gph->adj_mat);
@@ -78,7 +87,7 @@ void graph_init(graph *gph) {
                 }
             }
         }
-    } else if (gph->is_directed == 0) {
+    } else if (gph->is_directed == 0 && gph->is_simple == 0) {
         while (fgets(buf, BUFSIZ, stdin)) {
             rptr = buf;
             long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
@@ -101,6 +110,24 @@ void graph_init(graph *gph) {
                     gph->adj_mat.mat[r][c] > 0) {
                     gph->has_loops = 1; // checks for loops
                 }
+            }
+        }
+    } else if (gph->is_directed == 0 && gph->is_simple == 1) {
+        while (fgets(buf, BUFSIZ, stdin)) {
+            rptr = buf;
+            long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+            long long c = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+            if (r == -1 && c == -1) {
+                break;
+            }
+
+            if (r >= 0 && c >= 0 && r < gph->no_vertex && c < gph->no_vertex) {
+                if (gph->adj_mat.mat[r][c] == 0) {
+                    gph->no_edge++;
+                }
+
+                gph->adj_mat.mat[r][c] = 1;
+                gph->adj_mat.mat[c][r] = 1;
             }
         }
     }

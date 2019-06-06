@@ -18,6 +18,7 @@ typedef struct _graph {
     long has_loops;
     long is_directed;
     long multiple_edges;
+    long is_simple;
 } graph;
 
 // Graph constructor
