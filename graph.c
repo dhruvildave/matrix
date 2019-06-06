@@ -56,9 +56,7 @@ void graph_init(graph *gph) {
     }
 
     if (gph->is_directed == 1) {
-        for (long long i = 0;
-             i < gph->no_vertex * gph->no_vertex && fgets(buf, BUFSIZ, stdin);
-             ++i) {
+        for (long long i = 0; fgets(buf, BUFSIZ, stdin); ++i) {
             rptr = buf;
             long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
             long long c = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
@@ -81,9 +79,7 @@ void graph_init(graph *gph) {
             }
         }
     } else if (gph->is_directed == 0) {
-        for (long long i = 0;
-             i < gph->no_vertex * gph->no_vertex && fgets(buf, BUFSIZ, stdin);
-             ++i) {
+        for (long long i = 0; fgets(buf, BUFSIZ, stdin); ++i) {
             rptr = buf;
             long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
             long long c = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
