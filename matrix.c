@@ -71,6 +71,8 @@ static int is_valid_matrix(matrix *mat) {
 
 // Matrix copy
 void mat_cp(matrix *mat_from, matrix *mat_to) {
+    mat_dtor(mat_to);
+    mat_ctor(mat_to);
     mat_to->row = mat_from->row;
     mat_to->col = mat_from->col;
 
@@ -85,6 +87,8 @@ void mat_cp(matrix *mat_from, matrix *mat_to) {
 
 // Matrix move
 void mat_mv(matrix *mat_from, matrix *mat_to) {
+    mat_dtor(mat_to);
+    mat_ctor(mat_to);
     mat_cp(mat_from, mat_to);
     mat_dtor(mat_from);
 }
