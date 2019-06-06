@@ -45,6 +45,7 @@ void mat_init(matrix *mat) {
     rptr = buf;
     mat->row = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
     mat->col = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+    printf("\n");
 
     if (mat->col >= 0 && mat->row >= 0) {
         mat_alloc(mat);

@@ -15,6 +15,7 @@ int main(void) {
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     long test = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+    printf("\n");
     for (long i = 0; i < test; ++i) {
         graph g;
         graph_ctor(&g);

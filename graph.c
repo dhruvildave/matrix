@@ -41,18 +41,21 @@ void graph_init(graph *gph) {
     rptr = buf;
     gph->no_vertex = gph->adj_mat.row = gph->adj_mat.col =
         strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+    printf("\n");
 
     gph->no_edge = gph->multiple_edges = gph->has_loops = gph->is_simple = 0;
     printf("Is the graph directed? (0 / 1) : ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     gph->is_directed = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+    printf("\n");
 
     if (gph->is_directed == 0) {
         printf("Is the graph simple? (0 / 1) : ");
         fgets(buf, BUFSIZ, stdin);
         rptr = buf;
         gph->is_simple = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+        printf("\n");
     }
 
     if (gph->no_vertex > 0) {
