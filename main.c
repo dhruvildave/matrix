@@ -11,11 +11,11 @@ int main(void) {
     char *eptr = NULL;
     const int NUMBASE = 10;
 
-    printf("Enter the number of testcases: ");
+    // printf("Enter the number of testcases: ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     long test = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-    printf("\n");
+    // printf("\n");
     for (long i = 0; i < test; ++i) {
         // graph g;
         // graph_ctor(&g);
@@ -38,15 +38,15 @@ int main(void) {
         mat_ctor(&b);
         mat_inv(&a, &b);
 
-        // matrix c;
-        // mat_ctor(&c);
-        mat_inv(&b, &a);
+        matrix c;
+        mat_ctor(&c);
+        matrix_multiply(&a, &b);
 
-        mat_pprint(&a);
+        mat_print(&a);
 
         mat_dtor(&a);
         mat_dtor(&b);
-        // mat_dtor(&c);
+        mat_dtor(&c);
     }
 
     return 0;

@@ -54,12 +54,12 @@ void mat_init(matrix *mat) {
     char *eptr = NULL;
     const int NUMBASE = 10;
 
-    printf("Enter row and column of matrix seperated by space: ");
+    // printf("Enter row and column of matrix seperated by space: ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     mat->row = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
     mat->col = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-    printf("\n");
+    // printf("\n");
 
     if (mat->col >= 0 && mat->row >= 0) {
         mat_alloc(mat);
@@ -113,7 +113,7 @@ static int is_integer_matrix(matrix *mat) {
 
 // Matrix print
 void mat_print(matrix *mat) {
-    printf("\n");
+    // printf("\n");
     if (is_integer_matrix(mat)) {
         printf("[");
         for (long long i = 0; i < mat->row; ++i) {
@@ -148,7 +148,7 @@ void mat_print(matrix *mat) {
 
 // Matrix pretty print
 void mat_pprint(matrix *mat) {
-    printf("\n");
+    // printf("\n");
     if (is_integer_matrix(mat)) {
         for (long long i = 0; i < mat->row; ++i) {
             for (long long j = 0; j < mat->col; ++j) {
