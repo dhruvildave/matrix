@@ -51,5 +51,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# Other Folders
+# Other Folders and Files
 **/.vscode/ipch/
+**/vgcore.*
