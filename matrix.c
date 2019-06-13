@@ -28,6 +28,7 @@ void mat_dtor(matrix *mat) {
     if (is_valid_matrix(mat)) {
         for (long long i = 0; i < mat->row; ++i) {
             free(mat->mat[i]);
+            mat->mat[i] = NULL;
         }
 
         free(mat->mat);
@@ -199,6 +200,10 @@ void sub(matrix *subend0, matrix *subend1) {
 
 // Matrix transpose
 void transpose(matrix *mat) {
+    if (is_valid_matrix(mat) == 0) {
+        return;
+    }
+
     if (is_square_matrix(mat)) {
         for (long long i = 0; i < mat->row; ++i) {
             for (long long j = 0; j < i; ++j) {
@@ -379,6 +384,7 @@ void mat_inv(matrix *mat, matrix *inv) {
     mat_alloc(inv);
 
     matrix adj;
+    mat_ctor(&adj);
     mat_adj(mat, &adj);
 
     scalar_mul(&adj, 1 / d);

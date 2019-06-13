@@ -27,22 +27,26 @@ int main(void) {
 
         matrix a;
         mat_ctor(&a);
+
+        // printf("%lld %lld\n", a.row, a.col);
+
         mat_init(&a);
+
+        // transpose(&a);
 
         matrix b;
         mat_ctor(&b);
-        // mat_inv(&a, &b);
+        mat_inv(&a, &b);
 
-        matrix c;
-        mat_ctor(&c);
-        // mat_inv(&b, &a);
+        // matrix c;
+        // mat_ctor(&c);
+        mat_inv(&b, &a);
 
         mat_pprint(&a);
 
         mat_dtor(&a);
         mat_dtor(&b);
-        mat_dtor(&c);
-        mat_dtor(&a);
+        // mat_dtor(&c);
     }
 
     return 0;
