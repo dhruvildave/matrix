@@ -31,17 +31,18 @@ int main(void) {
 
         matrix b;
         mat_ctor(&b);
-        mat_inv(&a, &b);
+        // mat_inv(&a, &b);
 
         matrix c;
         mat_ctor(&c);
-        mat_inv(&b, &a);
+        // mat_inv(&b, &a);
 
         mat_pprint(&a);
 
         mat_dtor(&a);
         mat_dtor(&b);
         mat_dtor(&c);
+        mat_dtor(&a);
     }
 
     return 0;

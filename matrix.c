@@ -7,6 +7,15 @@
 #include "pch.h"
 #include <math.h>
 
+// Checks the validity of matrix
+static int is_valid_matrix(matrix *mat) {
+    if (mat->row > 0 && mat->col > 0 && mat->mat != NULL) {
+        return 1;
+    }
+
+    return 0;
+}
+
 // Matrix constructor
 void mat_ctor(matrix *mat) {
     mat->col = mat->row = -1;
@@ -16,9 +25,13 @@ void mat_ctor(matrix *mat) {
 
 // Matrix destructor
 void mat_dtor(matrix *mat) {
-    if (mat->col >= 0 && mat->row >= 0) {
-        mat->col = mat->row = -1;
+    if (is_valid_matrix(mat)) {
+        for (long long i = 0; i < mat->row; ++i) {
+            free(mat->mat[i]);
+        }
+
         free(mat->mat);
+        mat->col = mat->row = -1;
         mat->mat = NULL;
     }
 }
@@ -58,15 +71,6 @@ void mat_init(matrix *mat) {
             mat->mat[i][j] = strtold(strtok_r(rptr, " ", &rptr), &eptr);
         }
     }
-}
-
-// Checks the validity of matrix
-static int is_valid_matrix(matrix *mat) {
-    if (mat->row > 0 && mat->col > 0 && mat->mat != NULL) {
-        return 1;
-    }
-
-    return 0;
 }
 
 // Matrix copy
