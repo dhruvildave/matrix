@@ -4,16 +4,15 @@
 // matrix.c
 
 #include "matrix.h"
-#include "pch.h"
 #include <math.h>
 
 // Checks the validity of matrix
-static int is_valid_matrix(matrix *mat) {
+static bool is_valid_matrix(matrix *mat) {
     if (mat->row > 0 && mat->col > 0 && mat->mat != NULL) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 // Matrix constructor
@@ -99,16 +98,16 @@ void mat_mv(matrix *mat_from, matrix *mat_to) {
 }
 
 // Checks if all the elements of matrix are integers
-static int is_integer_matrix(matrix *mat) {
+static bool is_integer_matrix(matrix *mat) {
     for (long long i = 0; i < mat->row; ++i) {
         for (long long j = 0; j < mat->col; ++j) {
             if (mat->mat[i][j] - floorl(mat->mat[i][j]) != 0) {
-                return 0;
+                return false;
             }
         }
     }
 
-    return 1;
+    return true;
 }
 
 // Matrix print
@@ -168,12 +167,12 @@ void mat_pprint(matrix *mat) {
 }
 
 // Checks if the matrix is square or not
-static int is_square_matrix(matrix *mat) {
+static bool is_square_matrix(matrix *mat) {
     if (is_valid_matrix(mat) && mat->col == mat->row) {
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 // Matrix addition
@@ -200,7 +199,7 @@ void sub(matrix *subend0, matrix *subend1) {
 
 // Matrix transpose
 void transpose(matrix *mat) {
-    if (is_valid_matrix(mat) == 0) {
+    if (!is_valid_matrix(mat)) {
         return;
     }
 
@@ -340,7 +339,7 @@ long double det(matrix *mat) {
 
 // Finds the adjoint of mat and store in adj
 void mat_adj(matrix *mat, matrix *adj) {
-    if (is_square_matrix(mat) == 0) {
+    if (!is_square_matrix(mat)) {
         return;
     }
 
@@ -393,17 +392,17 @@ void mat_inv(matrix *mat, matrix *inv) {
 }
 
 // Checks the equality of matrix A and B
-int matrix_equality(matrix *A, matrix *B) {
+bool matrix_equality(matrix *A, matrix *B) {
     if (is_valid_matrix(A) && is_valid_matrix(B) && A->row == B->row &&
         A->col == B->col) {
         for (long long i = 0; i < A->row; ++i) {
             for (long long j = 0; j < A->col; ++j) {
                 if (A->mat[i][j] != B->mat[i][j]) {
-                    return 0;
+                    return false;
                 }
             }
         }
     }
 
-    return 1;
+    return true;
 }

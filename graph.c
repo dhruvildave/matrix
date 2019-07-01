@@ -7,24 +7,24 @@
 
 // Graph constructor
 void graph_ctor(graph *gph) {
-    gph->has_loops = -1;
-    gph->is_directed = -1;
+    gph->has_loops = false;
+    gph->is_directed = false;
     gph->no_edge = -1;
     gph->no_vertex = -1;
-    gph->multiple_edges = -1;
-    gph->is_simple = -1;
+    gph->multiple_edges = false;
+    gph->is_simple = false;
 
     mat_ctor(&gph->adj_mat);
 }
 
 // Graph destructor
 void graph_dtor(graph *gph) {
-    gph->has_loops = -1;
-    gph->is_directed = -1;
+    gph->has_loops = false;
+    gph->is_directed = false;
     gph->no_edge = -1;
     gph->no_vertex = -1;
-    gph->multiple_edges = -1;
-    gph->is_simple = -1;
+    gph->multiple_edges = false;
+    gph->is_simple = false;
 
     mat_dtor(&gph->adj_mat);
 }
@@ -36,38 +36,38 @@ void graph_init(graph *gph) {
     char *eptr = NULL;
     const int NUMBASE = 10;
 
-    printf("Enter the number of vertex: ");
+    // printf("Enter the number of vertex: ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     gph->no_vertex = gph->adj_mat.row = gph->adj_mat.col =
         strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-    printf("\n");
+    // printf("\n");
 
-    gph->no_edge = gph->multiple_edges = gph->has_loops = gph->is_simple = 0;
-    printf("Is the graph directed? (0 / 1) : ");
+    // gph->no_edge = gph->multiple_edges = gph->has_loops = gph->is_simple = 0;
+    // printf("Is the graph directed? (0 / 1) : ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     gph->is_directed = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-    printf("\n");
+    // printf("\n");
 
-    if (gph->is_directed == 0) {
-        printf("Is the graph simple? (0 / 1) : ");
+    if (gph->is_directed == false) {
+        // printf("Is the graph simple? (0 / 1) : ");
         fgets(buf, BUFSIZ, stdin);
         rptr = buf;
         gph->is_simple = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-        printf("\n");
+        // printf("\n");
     }
 
     if (gph->no_vertex > 0) {
         mat_alloc(&gph->adj_mat);
     }
 
-    if (gph->no_vertex > 0) {
-        printf("Enter list of space seperated vertex\n");
-        printf("Enter -1 -1 to end the input:\n");
-    }
+    // if (gph->no_vertex > 0) {
+    //     printf("Enter list of space seperated vertex\n");
+    //     printf("Enter -1 -1 to end the input:\n");
+    // }
 
-    if (gph->is_directed == 1) {
+    if (gph->is_directed) {
         while (fgets(buf, BUFSIZ, stdin)) {
             rptr = buf;
             long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
@@ -80,17 +80,16 @@ void graph_init(graph *gph) {
                 gph->adj_mat.mat[r][c]++;
                 gph->no_edge++;
 
-                if (gph->multiple_edges == 0 && gph->adj_mat.mat[r][c] > 1) {
-                    gph->multiple_edges = 1; // checks for multiple edges
+                if (!gph->multiple_edges && gph->adj_mat.mat[r][c] > 1) {
+                    gph->multiple_edges = true; // checks for multiple edges
                 }
 
-                if (gph->has_loops == 0 && r == c &&
-                    gph->adj_mat.mat[r][c] > 0) {
-                    gph->has_loops = 1; // checks for loops
+                if (!gph->has_loops && r == c && gph->adj_mat.mat[r][c] > 0) {
+                    gph->has_loops = true; // checks for loops
                 }
             }
         }
-    } else if (gph->is_directed == 0 && gph->is_simple == 0) {
+    } else if (!gph->is_directed && !gph->is_simple) {
         while (fgets(buf, BUFSIZ, stdin)) {
             rptr = buf;
             long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
@@ -104,18 +103,17 @@ void graph_init(graph *gph) {
                 gph->adj_mat.mat[c][r]++;
                 gph->no_edge++;
 
-                if (gph->multiple_edges == 0 && (gph->adj_mat.mat[r][c] > 1 ||
-                                                 gph->adj_mat.mat[c][r] > 1)) {
+                if (!gph->multiple_edges && (gph->adj_mat.mat[r][c] > 1 ||
+                                             gph->adj_mat.mat[c][r] > 1)) {
                     gph->multiple_edges = 1; // checks for multiple edges
                 }
 
-                if (gph->has_loops == 0 && r == c &&
-                    gph->adj_mat.mat[r][c] > 0) {
+                if (!gph->has_loops && r == c && gph->adj_mat.mat[r][c] > 0) {
                     gph->has_loops = 1; // checks for loops
                 }
             }
         }
-    } else if (gph->is_directed == 0 && gph->is_simple == 1) {
+    } else if (!gph->is_directed && gph->is_simple) {
         while (fgets(buf, BUFSIZ, stdin)) {
             rptr = buf;
             long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);

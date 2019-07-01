@@ -6,6 +6,8 @@
 #if !defined(MATRIX_H)
 #define MATRIX_H 1
 
+#include "pch.h"
+
 typedef struct _matrix {
     long long row;
     long long col;
@@ -65,6 +67,6 @@ void adj(matrix *mat, matrix *adj);
 void mat_inv(matrix *mat, matrix *inv);
 
 // Checks the equality of matrix A and B
-int matrix_equality(matrix *A, matrix *B);
+bool matrix_equality(matrix *A, matrix *B);
 
 #endif // MATRIX_H

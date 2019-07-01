@@ -7,7 +7,6 @@
 #define GRAPH_H 1
 
 #include "matrix.h"
-#include "pch.h"
 
 typedef struct _graph {
     matrix adj_mat;
@@ -15,10 +14,10 @@ typedef struct _graph {
     long long no_vertex;
     long long no_edge;
 
-    long has_loops;
-    long is_directed;
-    long multiple_edges;
-    long is_simple;
+    bool has_loops;
+    bool is_directed;
+    bool multiple_edges;
+    bool is_simple;
 } graph;
 
 // Graph constructor
