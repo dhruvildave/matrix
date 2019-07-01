@@ -7,10 +7,11 @@
 
 // Graph constructor
 void graph_ctor(graph *gph) {
-    gph->has_loops = false;
-    gph->is_directed = false;
     gph->no_edge = -1;
     gph->no_vertex = -1;
+
+    gph->has_loops = false;
+    gph->is_directed = false;
     gph->multiple_edges = false;
     gph->is_simple = false;
 
@@ -19,10 +20,11 @@ void graph_ctor(graph *gph) {
 
 // Graph destructor
 void graph_dtor(graph *gph) {
-    gph->has_loops = false;
-    gph->is_directed = false;
     gph->no_edge = -1;
     gph->no_vertex = -1;
+
+    gph->has_loops = false;
+    gph->is_directed = false;
     gph->multiple_edges = false;
     gph->is_simple = false;
 
@@ -50,7 +52,7 @@ void graph_init(graph *gph) {
     gph->is_directed = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
     // printf("\n");
 
-    if (gph->is_directed == false) {
+    if (!gph->is_directed) {
         // printf("Is the graph simple? (0 / 1) : ");
         fgets(buf, BUFSIZ, stdin);
         rptr = buf;
