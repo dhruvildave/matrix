@@ -107,11 +107,11 @@ void graph_init(graph *gph) {
 
                 if (!gph->multiple_edges && (gph->adj_mat.mat[r][c] > 1 ||
                                              gph->adj_mat.mat[c][r] > 1)) {
-                    gph->multiple_edges = 1; // checks for multiple edges
+                    gph->multiple_edges = true; // checks for multiple edges
                 }
 
                 if (!gph->has_loops && r == c && gph->adj_mat.mat[r][c] > 0) {
-                    gph->has_loops = 1; // checks for loops
+                    gph->has_loops = true; // checks for loops
                 }
             }
         }
