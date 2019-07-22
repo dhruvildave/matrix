@@ -36,6 +36,24 @@ void mat_dtor(matrix *mat) {
     }
 }
 
+// Constructor Wrapper
+static void *ctor(void *_self) {
+    matrix *self = _self;
+    assert(self);
+    mat_ctor(self);
+    return self;
+}
+
+// Destructor Wrapper
+static void *dtor(void *_self) {
+    matrix *self = _self;
+    assert(self && self->mat);
+    mat_dtor(self);
+    return self;
+}
+
+const Class Matrix = {sizeof(matrix), ctor, dtor};
+
 // Matrix allocator
 void mat_alloc(matrix *mat) {
     if (mat->row >= 0 && mat->col >= 0) {

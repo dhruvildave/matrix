@@ -31,6 +31,24 @@ void graph_dtor(graph *gph) {
     mat_dtor(&gph->adj_mat);
 }
 
+// Constructor Wrapper
+static void *ctor(void *_self) {
+    graph *self = _self;
+    assert(self);
+    graph_ctor(self);
+    return self;
+}
+
+// Destructor Wrapper
+static void *dtor(void *_self) {
+    graph *self = _self;
+    assert(self);
+    graph_dtor(self);
+    return self;
+}
+
+const Class Graph = {sizeof(graph), ctor, dtor};
+
 // Graph initializer
 void graph_init(graph *gph) {
     char buf[BUFSIZ] = {0};

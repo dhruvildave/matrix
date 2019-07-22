@@ -6,20 +6,24 @@
 #if !defined(MATRIX_H)
 #define MATRIX_H 1
 
-#include "pch.h"
+#include "new/new.h"
 
-typedef struct _matrix {
+typedef struct matrix {
+    const void *cls;
+
     long long row;
     long long col;
 
     long double **mat;
 } matrix;
 
+const Class Matrix;
+
 // Matrix constructor
-void mat_ctor(matrix *mat);
+void mat_ctor(matrix *gph);
 
 // Matrix destructor
-void mat_dtor(matrix *mat);
+void mat_dtor(matrix *gph);
 
 // Matrix initializer
 void mat_init(matrix *mat);

@@ -8,7 +8,7 @@
 
 #include "matrix.h"
 
-typedef struct _graph {
+typedef struct graph {
     matrix adj_mat;
 
     long long no_vertex;
@@ -19,6 +19,8 @@ typedef struct _graph {
     bool multiple_edges;
     bool is_simple;
 } graph;
+
+const Class Graph;
 
 // Graph constructor
 void graph_ctor(graph *gph);
