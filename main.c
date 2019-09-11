@@ -14,27 +14,27 @@ int main(void) {
     // printf("Enter the number of testcases: ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
-    long test = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+    long test = strtol(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
     // printf("\n");
     for (long i = 0; i < test; ++i) {
-        graph *g = New(&Graph);
-        graph_init(g);
-        graph_pprint(g);
-        Delete(g);
+        // graph *g = New(&Graph);
+        // graph_init(g);
+        // graph_pprint(g);
+        // Delete(g);
 
         matrix *a = New(&Matrix);
 
         mat_init(a);
         transpose(a);
 
-        matrix *b = New(&Matrix);
-        mat_inv(a, b);
+        // matrix *b = New(&Matrix);
+        // mat_inv(a, b);
 
-        matrix_multiply(a, b);
+        // matrix_multiply(a, b);
         mat_print(a);
 
         Delete(a);
-        Delete(b);
+        // Delete(b);
     }
 
     return 0;

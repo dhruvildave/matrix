@@ -60,21 +60,21 @@ void graph_init(graph *gph) {
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     gph->no_vertex = gph->adj_mat.row = gph->adj_mat.col =
-        strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+        strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
     // printf("\n");
 
     // gph->no_edge = gph->multiple_edges = gph->has_loops = gph->is_simple = 0;
     // printf("Is the graph directed? (0 / 1) : ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
-    gph->is_directed = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+    gph->is_directed = strtol(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
     // printf("\n");
 
     if (!gph->is_directed) {
         // printf("Is the graph simple? (0 / 1) : ");
         fgets(buf, BUFSIZ, stdin);
         rptr = buf;
-        gph->is_simple = strtol(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+        gph->is_simple = strtol(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
         // printf("\n");
     }
 
@@ -90,8 +90,8 @@ void graph_init(graph *gph) {
     if (gph->is_directed) {
         while (fgets(buf, BUFSIZ, stdin)) {
             rptr = buf;
-            long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-            long long c = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+            long long r = strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+            long long c = strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
             if (r == -1 && c == -1) {
                 break;
             }
@@ -112,8 +112,8 @@ void graph_init(graph *gph) {
     } else if (!gph->is_directed && !gph->is_simple) {
         while (fgets(buf, BUFSIZ, stdin)) {
             rptr = buf;
-            long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-            long long c = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+            long long r = strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+            long long c = strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
             if (r == -1 && c == -1) {
                 break;
             }
@@ -136,8 +136,8 @@ void graph_init(graph *gph) {
     } else if (!gph->is_directed && gph->is_simple) {
         while (fgets(buf, BUFSIZ, stdin)) {
             rptr = buf;
-            long long r = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-            long long c = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+            long long r = strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+            long long c = strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
             if (r == -1 && c == -1) {
                 break;
             }

@@ -74,8 +74,8 @@ void mat_init(matrix *mat) {
     // printf("Enter row and column of matrix seperated by space: ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
-    mat->row = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-    mat->col = strtoll(strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+    mat->row = strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+    mat->col = strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
     // printf("\n");
 
     if (mat->col >= 0 && mat->row >= 0) {
@@ -86,7 +86,7 @@ void mat_init(matrix *mat) {
         fgets(buf, BUFSIZ, stdin);
         rptr = buf;
         for (long long j = 0; j < mat->col; ++j) {
-            mat->mat[i][j] = strtold(strtok_r(rptr, " ", &rptr), &eptr);
+            mat->mat[i][j] = strtold(__strtok_r(rptr, " ", &rptr), &eptr);
         }
     }
 }
