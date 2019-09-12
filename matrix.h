@@ -44,7 +44,7 @@ void mat_input(matrix *mat);
 void transpose(matrix *mat);
 
 // Reduced Row Echelon Form
-void rref(matrix *mat);
+void rref(matrix *A);
 
 // Return a matrix of ones
 matrix *ones(long row, long col);

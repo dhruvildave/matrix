@@ -1,6 +1,7 @@
 
 #include "matrix.h"
 
+// Multiply a row by a scalar
 static void row_scalar_mul(long double *row, long len, long double num) {
     for (long i = 0; i < len; ++i) {
         row[i] *= num;
@@ -48,9 +49,9 @@ void rref(matrix *A) {
 
             if (k == A->row) {
                 break;
-            } else {
-                swap_rows(A, k, i);
             }
+
+            swap_rows(A, k, i);
         }
 
         // num_pivot++;
