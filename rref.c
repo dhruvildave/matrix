@@ -32,7 +32,7 @@ static void sub_row(matrix *A, long row1, long row2, matrix *I) {
 // Reduced Row Echelon Form
 void rref(matrix *A) {
     // Doing row swap if pivot is 0
-    long num_pivot = 0;
+    // long num_pivot = 0;
 
     matrix *I = mat_init();
     printf("Enter b:\n");
@@ -53,7 +53,7 @@ void rref(matrix *A) {
             }
         }
 
-        num_pivot++;
+        // num_pivot++;
 
         for (long j = i + 1; j < A->row; ++j) {
             if (A->data[i][j] != 0) {
@@ -70,11 +70,11 @@ void rref(matrix *A) {
         }
     }
 
-    if (A->data[A->row - 1][A->col - 1] != 0) {
-        num_pivot++;
-    }
+    // if (A->data[A->row - 1][A->col - 1] != 0) {
+    //     num_pivot++;
+    // }
 
-    printf("%ld\n", num_pivot);
+    // printf("%ld\n", num_pivot);
 
     for (long i = 0; i < A->row; ++i) {
         row_scalar_mul(I->data[i], I->col, 1 / A->data[i][i]);
