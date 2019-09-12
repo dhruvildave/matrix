@@ -167,7 +167,7 @@ void mat_input(matrix *mat) {
     char *eptr = NULL;
     const int NUMBASE = 10;
 
-    printf("Enter row and column of A seperated by space: ");
+    printf("Enter row and column seperated by space: ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     mat->row = strtol(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
@@ -265,7 +265,9 @@ void sub_row(matrix *A, long row1, long row2, matrix *I) {
 void rref(matrix *A) {
     // Doing row swap if pivot is 0
     long num_pivot = 0;
+
     matrix *I = mat_init();
+    printf("Enter b:\n");
     mat_input(I);
     for (long i = 0; i < A->row - 1; ++i) {
         if (A->data[i][i] == 0) {

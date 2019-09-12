@@ -7,6 +7,7 @@
 
 int main(void) {
     matrix *mat = mat_init();
+    printf("Enter A:\n");
     mat_input(mat);
     rref(mat);
 
