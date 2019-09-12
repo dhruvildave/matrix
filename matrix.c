@@ -6,121 +6,83 @@
 #include "matrix.h"
 #include <math.h>
 
-// Checks the validity of matrix
-static bool is_valid_matrix(matrix *mat) {
-    if (mat->row > 0 && mat->col > 0 && mat->mat != NULL) {
-        return true;
-    }
-
-    return false;
-}
-
 // Matrix constructor
-void mat_ctor(matrix *mat) {
-    mat->col = mat->row = -1;
-
-    mat->mat = NULL;
+static void mat_ctor(matrix *mat) {
+    mat->row = 0;
+    mat->col = 0;
+    mat->row_major = true;
+    mat->data = NULL;
 }
 
 // Matrix destructor
-void mat_dtor(matrix *mat) {
-    if (is_valid_matrix(mat)) {
-        for (long long i = 0; i < mat->row; ++i) {
-            free(mat->mat[i]);
-            mat->mat[i] = NULL;
+static void mat_dtor(matrix *mat) {
+    if (mat->row_major) {
+        for (long i = 0; i < mat->row; ++i) {
+            free(mat->data[i]);
+            mat->data[i] = NULL;
         }
-
-        free(mat->mat);
-        mat->col = mat->row = -1;
-        mat->mat = NULL;
+    } else {
+        for (long i = 0; i < mat->col; ++i) {
+            free(mat->data[i]);
+            mat->data[i] = NULL;
+        }
     }
+
+    free(mat->data);
+    mat->col = mat->row = 0;
+    mat->data = NULL;
 }
 
 // Constructor Wrapper
-static void *ctor(void *_self) {
-    matrix *self = _self;
-    assert(self);
-    mat_ctor(self);
-    return self;
+matrix *mat_init(void) {
+    matrix *mat = calloc(1, sizeof(matrix));
+    mat_ctor(mat);
+
+    return mat;
 }
 
 // Destructor Wrapper
-static void *dtor(void *_self) {
-    matrix *self = _self;
-    assert(self && self->mat);
-    mat_dtor(self);
-    return self;
+void mat_del(matrix *mat) {
+    assert(mat);
+    mat_dtor(mat);
+    free(mat);
+    mat = NULL;
 }
-
-const Class Matrix = {sizeof(matrix), ctor, dtor};
 
 // Matrix allocator
 void mat_alloc(matrix *mat) {
     if (mat->row >= 0 && mat->col >= 0) {
-        mat->mat = (long double **)calloc(mat->row, sizeof(long double *));
+        mat->data = calloc(mat->row, sizeof(long double *));
         for (long long i = 0; i < mat->row; ++i) {
-            mat->mat[i] = (long double *)calloc(mat->col, sizeof(long double));
+            mat->data[i] = calloc(mat->col, sizeof(long double));
         }
     }
 }
 
-// Matrix initializer
-void mat_init(matrix *mat) {
-    char buf[BUFSIZ] = {0};
-    char *rptr = buf;
-    char *eptr = NULL;
-    const int NUMBASE = 10;
-
-    // printf("Enter row and column of matrix seperated by space: ");
-    fgets(buf, BUFSIZ, stdin);
-    rptr = buf;
-    mat->row = strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-    mat->col = strtoll(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
-    // printf("\n");
-
-    if (mat->col >= 0 && mat->row >= 0) {
-        mat_alloc(mat);
-    }
-
-    for (long long i = 0; i < mat->row; ++i) {
-        fgets(buf, BUFSIZ, stdin);
-        rptr = buf;
-        for (long long j = 0; j < mat->col; ++j) {
-            mat->mat[i][j] = strtold(__strtok_r(rptr, " ", &rptr), &eptr);
-        }
-    }
+// Transpose the matrix
+void transpose(matrix *mat) {
+    mat->row_major = !(mat->row_major);
+    long temp = mat->row;
+    mat->row = mat->col;
+    mat->col = temp;
 }
 
-// Matrix copy
-void mat_cp(matrix *mat_from, matrix *mat_to) {
-    mat_dtor(mat_to);
-    mat_ctor(mat_to);
-    mat_to->row = mat_from->row;
-    mat_to->col = mat_from->col;
-
-    mat_alloc(mat_to);
-
-    for (long long i = 0; i < mat_from->row; ++i) {
-        for (long long j = 0; j < mat_from->col; ++j) {
-            mat_to->mat[i][j] = mat_from->mat[i][j];
-        }
-    }
-}
-
-// Matrix move
-void mat_mv(matrix *mat_from, matrix *mat_to) {
-    mat_dtor(mat_to);
-    mat_ctor(mat_to);
-    mat_cp(mat_from, mat_to);
-    mat_dtor(mat_from);
-}
-
-// Checks if all the elements of matrix are integers
+// Checks if all the values are integers or floats
 static bool is_integer_matrix(matrix *mat) {
-    for (long long i = 0; i < mat->row; ++i) {
-        for (long long j = 0; j < mat->col; ++j) {
-            if (mat->mat[i][j] - floorl(mat->mat[i][j]) != 0) {
-                return false;
+    if (mat->row_major) {
+        for (long i = 0; i < mat->row; ++i) {
+            for (long j = 0; j < mat->col; ++j) {
+                if (mat->data[i][j] - floorl(mat->data[i][j]) != 0) {
+                    return false;
+                }
+            }
+        }
+    } else {
+        for (long i = 0; i < mat->row; ++i) {
+            for (long j = 0; j < mat->col; ++j) {
+                if (mat->data[j][i] - floorl(mat->data[j][i]) != 0) {
+                    return false;
+                }
             }
         }
     }
@@ -131,296 +93,94 @@ static bool is_integer_matrix(matrix *mat) {
 // Matrix print
 void mat_print(matrix *mat) {
     // printf("\n");
-    if (is_integer_matrix(mat)) {
-        printf("[");
-        for (long long i = 0; i < mat->row; ++i) {
-            printf("[");
-            for (long long j = 0; j < mat->col; ++j) {
-                (j < mat->col - 1) ? printf("%.0Lf, ", mat->mat[i][j])
-                                   : printf("%.0Lf]", mat->mat[i][j]);
+    if (mat->row_major) {
+        // printf("\n");
+        if (is_integer_matrix(mat)) {
+            for (long i = 0; i < mat->row; ++i) {
+                for (long j = 0; j < mat->col; ++j) {
+                    printf("\t%.0Lf", mat->data[i][j]);
+                }
+                printf("\n");
             }
+            return;
+        }
 
-            if (i < mat->row - 1) {
-                printf(", ");
+        for (long i = 0; i < mat->row; ++i) {
+            for (long j = 0; j < mat->col; ++j) {
+                printf("\t%Lf", mat->data[i][j]);
             }
+            printf("\n");
         }
-        printf("]\n");
-        return;
-    }
-
-    printf("[");
-    for (long long i = 0; i < mat->row; ++i) {
-        printf("[");
-        for (long long j = 0; j < mat->col; ++j) {
-            (j < mat->col - 1) ? printf("%Lf, ", mat->mat[i][j])
-                               : printf("%Lf]", mat->mat[i][j]);
-        }
-
-        if (i < mat->row - 1) {
-            printf(", ");
-        }
-    }
-    printf("]\n");
-}
-
-// Matrix pretty print
-void mat_pprint(matrix *mat) {
-    // printf("\n");
-    if (is_integer_matrix(mat)) {
-        for (long long i = 0; i < mat->row; ++i) {
-            for (long long j = 0; j < mat->col; ++j) {
-                (j < mat->col - 1) ? printf("\t%.0Lf", mat->mat[i][j])
-                                   : printf("\t%.0Lf\n", mat->mat[i][j]);
+    } else {
+        // printf("\n");
+        if (is_integer_matrix(mat)) {
+            for (long i = 0; i < mat->row; ++i) {
+                for (long j = 0; j < mat->col; ++j) {
+                    printf("\t%.0Lf", mat->data[j][i]);
+                }
+                printf("\n");
             }
+            return;
         }
-        return;
-    }
 
-    for (long long i = 0; i < mat->row; ++i) {
-        for (long long j = 0; j < mat->col; ++j) {
-            (j < mat->col - 1) ? printf("\t%Lf", mat->mat[i][j])
-                               : printf("\t%Lf\n", mat->mat[i][j]);
+        for (long i = 0; i < mat->row; ++i) {
+            for (long j = 0; j < mat->col; ++j) {
+                printf("\t%Lf", mat->data[j][i]);
+            }
+            printf("\n");
         }
     }
 }
 
-// Checks if the matrix is square or not
-static bool is_square_matrix(matrix *mat) {
-    if (is_valid_matrix(mat) && mat->col == mat->row) {
-        return true;
-    }
-
-    return false;
+// Swap the rows
+void swap_rows(matrix *mat, long row1, long row2) {
+    assert(row1 >= 0 && row1 < mat->row && row2 >= 0 && row2 < mat->row);
+    long double *temp = mat->data[row1];
+    mat->data[row1] = mat->data[row2];
+    mat->data[row2] = temp;
 }
 
-// Matrix addition
-void add(matrix *addend0, matrix *addend1) {
-    if (addend0->row == addend1->row && addend0->col == addend1->col) {
-        for (long long i = 0; i < addend0->row; ++i) {
-            for (long long j = 0; j < addend0->col; ++j) {
-                addend0->mat[i][j] += addend1->mat[i][j];
-            }
-        }
+// Swap the columns
+void swap_cols(matrix *mat, long col1, long col2) {
+    assert(col1 >= 0 && col1 < mat->col && col2 >= 0 && col2 < mat->col);
+    long double temp[mat->row];
+    for (long i = 0; i < mat->row; ++i) {
+        temp[i] = mat->data[i][col1];
     }
-}
 
-// Matrix substraction
-void sub(matrix *subend0, matrix *subend1) {
-    if (subend0->row == subend1->row && subend0->col == subend1->col) {
-        for (long long i = 0; i < subend0->row; ++i) {
-            for (long long j = 0; j < subend0->col; ++j) {
-                subend0->mat[i][j] -= subend1->mat[i][j];
-            }
-        }
+    for (long i = 0; i < mat->row; ++i) {
+        mat->data[i][col1] = mat->data[i][col2];
+    }
+
+    for (long i = 0; i < mat->row; ++i) {
+        mat->data[i][col2] = temp[i];
     }
 }
 
-// Matrix transpose
-void transpose(matrix *mat) {
-    if (!is_valid_matrix(mat)) {
-        return;
-    }
+// Clean the current memory and user input new matrix
+void mat_input(matrix *mat) {
+    mat_dtor(mat);
+    mat_ctor(mat);
 
-    if (is_square_matrix(mat)) {
-        for (long long i = 0; i < mat->row; ++i) {
-            for (long long j = 0; j < i; ++j) {
-                long double temp = mat->mat[i][j];
-                mat->mat[i][j] = mat->mat[j][i];
-                mat->mat[j][i] = temp;
-            }
-        }
+    char buf[BUFSIZ] = {0};
+    char *rptr = NULL;
+    char *eptr = NULL;
+    const int NUMBASE = 10;
 
-        return;
-    }
-
-    matrix new;
-    mat_ctor(&new);
-    mat_mv(mat, &new);
-
-    mat->row = new.col;
-    mat->col = new.row;
+    printf("Enter row and column of A seperated by space: ");
+    fgets(buf, BUFSIZ, stdin);
+    rptr = buf;
+    mat->row = strtol(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
+    mat->col = strtol(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
 
     mat_alloc(mat);
 
-    for (long long i = 0; i < new.row; ++i) {
-        for (long long j = 0; j < new.col; ++j) {
-            mat->mat[j][i] = new.mat[i][j];
+    // printf("Enter %ld rows and %ld columns:\n", mat->row, mat->col);
+    for (long i = 0; i < mat->row; ++i) {
+        fgets(buf, BUFSIZ, stdin);
+        rptr = buf;
+        for (long j = 0; j < mat->col; ++j) {
+            mat->data[i][j] = strtold(__strtok_r(rptr, " ", &rptr), &eptr);
         }
     }
-
-    mat_dtor(&new);
-}
-
-// Matrix scalar multiplication
-void scalar_mul(matrix *mat, long double num) {
-    if (is_valid_matrix(mat)) {
-        for (long long i = 0; i < mat->row; ++i) {
-            for (long long j = 0; j < mat->col; ++j) {
-                mat->mat[i][j] *= num;
-            }
-        }
-    }
-}
-
-// Make an identity matrix
-void init_identity_matrix(matrix *mat, long long num) {
-    if (num > 0) {
-        mat_dtor(mat);
-        mat_ctor(mat);
-
-        mat->row = mat->col = num;
-
-        mat_alloc(mat);
-
-        for (long long i = 0; i < mat->row; ++i) {
-            mat->mat[i][i] = 1;
-        }
-    }
-}
-
-// Multiply one matrix with another
-void matrix_multiply(matrix *A, matrix *B) {
-    if (is_valid_matrix(A) && is_valid_matrix(B) && A->col == B->row) {
-        matrix temp;
-        mat_ctor(&temp);
-        mat_mv(A, &temp);
-
-        A->row = temp.row;
-        A->col = B->col;
-
-        mat_alloc(A);
-        for (long long i = 0; i < temp.row; ++i) {
-            for (long long j = 0; j < B->col; ++j) {
-                long double sum = 0;
-                for (long long k = 0; k < B->row; ++k) {
-                    sum += temp.mat[i][k] * B->mat[k][j];
-                }
-                A->mat[i][j] = sum;
-            }
-        }
-
-        mat_dtor(&temp);
-    }
-}
-
-// Function to get cofactor of mat[p][q] in temp
-static void get_cofactor(matrix *mat, matrix *temp, long long p, long long q) {
-    long long i = 0;
-    long long j = 0;
-
-    for (long long row = 0; row < mat->row; row++) {
-        for (long long col = 0; col < mat->col; col++) {
-            if (row != p && col != q) {
-                temp->mat[i][j++] = mat->mat[row][col];
-
-                if (j == mat->row - 1) {
-                    j = 0;
-                    i++;
-                }
-            }
-        }
-    }
-}
-
-// Find determinant of the square matrix
-long double det(matrix *mat) {
-    if (is_square_matrix(mat) == 0 || is_valid_matrix(mat) == 0) {
-        return 0;
-    }
-
-    long double D = 0;
-
-    // Base case : if matrix contains single element
-    if (mat->row == 1) {
-        return mat->mat[0][0];
-    }
-
-    matrix temp;
-    mat_ctor(&temp);
-
-    temp.row = temp.col = mat->row - 1;
-    mat_alloc(&temp);
-
-    int sign = 1;
-
-    for (long long f = 0; f < mat->row; f++) {
-        get_cofactor(mat, &temp, 0, f); // Getting Cofactor of mat[0][f]
-        D += sign * mat->mat[0][f] * det(&temp);
-
-        sign = -sign; // terms are to be added with alternate sign
-    }
-
-    mat_dtor(&temp);
-
-    return D;
-}
-
-// Finds the adjoint of mat and store in adj
-void mat_adj(matrix *mat, matrix *adj) {
-    if (!is_square_matrix(mat)) {
-        return;
-    }
-
-    mat_dtor(adj);
-    mat_ctor(adj);
-
-    adj->col = adj->row = mat->row;
-
-    mat_alloc(adj);
-
-    for (long long i = 0; i < mat->row; ++i) {
-        for (long long j = 0; j < mat->col; ++j) {
-            matrix temp;
-            mat_ctor(&temp);
-            temp.row = temp.col = mat->row - 1;
-            mat_alloc(&temp);
-
-            get_cofactor(mat, &temp, i, j);
-            int sign = ((i + j) % 2 == 0) ? 1 : -1;
-
-            adj->mat[i][j] = sign * det(&temp);
-
-            mat_dtor(&temp);
-        }
-    }
-
-    transpose(adj);
-}
-
-// Finds the inverse of the mat and stores in inv
-void mat_inv(matrix *mat, matrix *inv) {
-    long double d = det(mat);
-    if (d == 0) {
-        return;
-    }
-
-    mat_dtor(inv);
-    mat_ctor(inv);
-
-    inv->col = inv->row = mat->row;
-    mat_alloc(inv);
-
-    matrix adj;
-    mat_ctor(&adj);
-    mat_adj(mat, &adj);
-
-    scalar_mul(&adj, 1 / d);
-
-    mat_mv(&adj, inv);
-}
-
-// Checks the equality of matrix A and B
-bool matrix_equality(matrix *A, matrix *B) {
-    if (is_valid_matrix(A) && is_valid_matrix(B) && A->row == B->row &&
-        A->col == B->col) {
-        for (long long i = 0; i < A->row; ++i) {
-            for (long long j = 0; j < A->col; ++j) {
-                if (A->mat[i][j] != B->mat[i][j]) {
-                    return false;
-                }
-            }
-        }
-    }
-
-    return true;
 }

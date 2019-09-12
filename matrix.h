@@ -6,71 +6,41 @@
 #if !defined(MATRIX_H)
 #define MATRIX_H 1
 
-#include "new/new.h"
+#include <assert.h>
+#include <errno.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct matrix {
-    const void *cls;
-
+    bool row_major;
     long long row;
     long long col;
 
-    long double **mat;
+    long double **data;
 } matrix;
 
-const Class Matrix;
-
-// Matrix constructor
-void mat_ctor(matrix *gph);
-
-// Matrix destructor
-void mat_dtor(matrix *gph);
-
 // Matrix initializer
-void mat_init(matrix *mat);
+matrix *mat_init(void);
 
-// Matrix allocator
-void mat_alloc(matrix *mat);
-
-// Matrix copy
-void mat_cp(matrix *mat_from, matrix *mat_to);
-
-// Matrix move
-void mat_mv(matrix *mat_from, matrix *mat_to);
-
-// Matrix print
-void mat_print(matrix *mat);
+// Matrix deleter
+void mat_del(matrix *mat);
 
 // Matrix pretty print
-void mat_pprint(matrix *mat);
+void mat_print(matrix *mat);
 
-// Matrix addition
-void add(matrix *addend0, matrix *addend1);
+// Swap the columns
+void swap_cols(matrix *mat, long col1, long col2);
 
-// Matrix substraction
-void sub(matrix *subend0, matrix *subend1);
+// Swap the rows
+void swap_rows(matrix *mat, long row1, long row2);
 
-// Matrix transpose
+// Clean the current memory and user input new matrix
+void mat_input(matrix *mat);
+
+// Transpose the matrix
 void transpose(matrix *mat);
-
-// Matrix scalar multiplication
-void scalar_mul(matrix *mat, long double num);
-
-// Matrix multiplication
-void matrix_multiply(matrix *A, matrix *B);
-
-// Make an identity matrix
-void init_identity_matrix(matrix *mat, long long num);
-
-// Find determinant of the square matrix
-long double det(matrix *mat);
-
-// Finds the adjoint of mat and store in adj
-void adj(matrix *mat, matrix *adj);
-
-// Finds the inverse of the mat and stores in inv
-void mat_inv(matrix *mat, matrix *inv);
-
-// Checks the equality of matrix A and B
-bool matrix_equality(matrix *A, matrix *B);
 
 #endif // MATRIX_H
