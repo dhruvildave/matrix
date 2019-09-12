@@ -6,13 +6,10 @@
 #include "matrix.h"
 
 int main(void) {
+    matrix *mat = mat_init();
+    mat_input(mat);
+    rref(mat);
 
-    matrix *a = mat_init();
-    mat_input(a);
-
-    mat_print(a);
-
-    mat_del(a);
-
+    mat_del(mat);
     return 0;
 }

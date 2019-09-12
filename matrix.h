@@ -43,4 +43,16 @@ void mat_input(matrix *mat);
 // Transpose the matrix
 void transpose(matrix *mat);
 
+// Reduced Row Echelon Form
+void rref(matrix *mat);
+
+// Return a matrix of ones
+matrix *ones(long row, long col);
+
+// Return a matrix of zeros
+matrix *zeros(long row, long col);
+
+// Return an identity matrix
+matrix *eye(long row, long col);
+
 #endif // MATRIX_H
