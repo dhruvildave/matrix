@@ -5,7 +5,7 @@
 
 #if !defined(__linux__)
 printf("Source code compliant only with Linux");
-exit(1);
+exit(EXIT_FAILURE);
 
 #endif // __linux__
 
