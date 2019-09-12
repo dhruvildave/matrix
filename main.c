@@ -3,6 +3,12 @@
 // Mon 27 May 2019 02:07:07 PM IST
 // main.c
 
+#if !defined(__linux__)
+printf("Source code compliant only with Linux");
+exit(1);
+
+#endif // __linux__
+
 #include "matrix.h"
 
 int main(void) {

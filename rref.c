@@ -4,7 +4,9 @@
 // Multiply a row by a scalar
 static void row_scalar_mul(long double *row, long len, long double num) {
     for (long i = 0; i < len; ++i) {
-        row[i] *= num;
+        if (row[i] != 0) {
+            row[i] *= num;
+        }
     }
 }
 
@@ -65,7 +67,7 @@ void rref(matrix *A) {
 
     for (long i = A->row - 1; i > 0; --i) {
         for (long j = i - 1; j >= 0; --j) {
-            if (A->data[j][i] != 0) {
+            if (A->data[j][i] != 0 && A->data[i][i] != 0) {
                 sub_row(A, i, j, I);
             }
         }
