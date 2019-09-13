@@ -12,11 +12,19 @@ int main(void) {
 
 #endif // __linux__
 
-    matrix *mat = mat_init();
+    matrix *A = mat_init();
     printf("Enter A:\n");
-    mat_input(mat);
-    rref(mat);
+    mat_input(A);
 
-    mat_del(mat);
+    matrix *b = mat_init();
+    printf("Enter b:\n");
+    mat_input(b);
+
+    matrix *x = aug(A, b);
+    rref(x);
+
+    mat_del(A);
+    mat_del(b);
+    mat_del(x);
     return 0;
 }

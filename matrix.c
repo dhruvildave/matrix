@@ -107,7 +107,7 @@ void mat_print(matrix *mat) {
 
         for (long i = 0; i < mat->row; ++i) {
             for (long j = 0; j < mat->col; ++j) {
-                printf("\t%Lf", mat->data[i][j]);
+                printf("\t%.2Lf", mat->data[i][j]);
             }
             printf("\n");
         }
@@ -125,7 +125,7 @@ void mat_print(matrix *mat) {
 
         for (long i = 0; i < mat->row; ++i) {
             for (long j = 0; j < mat->col; ++j) {
-                printf("\t%Lf", mat->data[j][i]);
+                printf("\t%.2Lf", mat->data[j][i]);
             }
             printf("\n");
         }
@@ -231,4 +231,27 @@ matrix *ones(long row, long col) {
     }
 
     return mat;
+}
+
+// Return [A b]
+matrix *aug(matrix *A, matrix *b) {
+    assert(A->row == b->row);
+    matrix *aug_mat = mat_init();
+    aug_mat->row = A->row;
+    aug_mat->col = A->col + b->col;
+    mat_alloc(aug_mat);
+
+    for (long i = 0; i < A->row; ++i) {
+        for (long j = 0; j < A->col; ++j) {
+            aug_mat->data[i][j] = A->data[i][j];
+        }
+    }
+
+    for (long i = 0; i < b->row; ++i) {
+        for (long j = 0; j < b->col; ++j) {
+            aug_mat->data[i][A->col + j] = b->data[i][j];
+        }
+    }
+
+    return aug_mat;
 }

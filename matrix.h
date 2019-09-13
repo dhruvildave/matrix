@@ -55,4 +55,7 @@ matrix *zeros(long row, long col);
 // Return an identity matrix
 matrix *eye(long row, long col);
 
+// Return [A b]
+matrix *aug(matrix *A, matrix *b);
+
 #endif // MATRIX_H
