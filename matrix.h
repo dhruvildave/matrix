@@ -16,8 +16,8 @@
 
 typedef struct matrix {
     bool row_major;
-    long long row;
-    long long col;
+    long row;
+    long col;
 
     long double **data;
 } matrix;
