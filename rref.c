@@ -35,14 +35,19 @@ static void sub_row(matrix *A, long row1, long row2, matrix *I) {
 // Reduced Row Echelon Form
 void rref(matrix *A) {
     // Doing row swap if pivot is 0
-    // long num_pivot = 0;
+    long num_pivot = 0;
+    long pivot_arr[A->col + 1];
+    for (long i = 0; i < A->col + 1; ++i) {
+        pivot_arr[i] = -1;
+    }
 
     matrix *I = mat_init();
     printf("Enter b:\n");
     mat_input(I);
+    long k = 0;
+    bool check_piv = false;
     for (long i = 0; i < A->row - 1; ++i) {
         if (A->data[i][i] == 0) {
-            long k = 0;
             for (k = i + 1; k < A->row; ++k) {
                 if (A->data[k][i] != 0) {
                     break;
@@ -50,17 +55,34 @@ void rref(matrix *A) {
             }
 
             if (k == A->row) {
+                k = i + 1;
+                check_piv = true;
                 break;
             }
 
             swap_rows(A, k, i);
         }
 
-        // num_pivot++;
+        pivot_arr[num_pivot] = i;
+        num_pivot++;
 
         for (long j = i + 1; j < A->row; ++j) {
             if (A->data[i][j] != 0) {
                 sub_row(A, i, j, I);
+            }
+
+            mat_print(A);
+            printf("\n");
+        }
+    }
+
+    if (check_piv) {
+        for (; k < A->row; ++k) {
+            for (long i = k; i < A->row; ++i) {
+                if (A->data[i][k] != 0) {
+                    pivot_arr[num_pivot] = k;
+                    num_pivot++;
+                }
             }
         }
     }
@@ -70,14 +92,17 @@ void rref(matrix *A) {
             if (A->data[j][i] != 0 && A->data[i][i] != 0) {
                 sub_row(A, i, j, I);
             }
+
+            mat_print(A);
+            printf("\n");
         }
     }
 
-    // if (A->data[A->row - 1][A->col - 1] != 0) {
-    //     num_pivot++;
-    // }
-
-    // printf("%ld\n", num_pivot);
+    printf("%ld\n", num_pivot);
+    for (long i = 0; pivot_arr[i] != -1; ++i) {
+        printf("\t%ld", pivot_arr[i]);
+    }
+    printf("\n\n");
 
     for (long i = 0; i < A->row; ++i) {
         row_scalar_mul(I->data[i], I->col, 1 / A->data[i][i]);
