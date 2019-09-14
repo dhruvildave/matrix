@@ -31,7 +31,7 @@ static bool is_zero_col(matrix *mat, long num) {
 }
 
 // row2 - row1
-static void sub_row(matrix *A, long row1, long row2) {
+static void sub_row_rref(matrix *A, long row1, long row2) {
     long double mul = A->data[row2][row1] / A->data[row1][row1];
     long double arr[A->col];
 
@@ -44,7 +44,29 @@ static void sub_row(matrix *A, long row1, long row2) {
     }
 }
 
-static void sub_row_piv(matrix *A, long row1, long row2, long piv) {
+static void sub_row_Ab(matrix *A, long row1, long row2, matrix *b) {
+    long double mul = A->data[row2][row1] / A->data[row1][row1];
+    long double arr[A->col];
+    long double arr_b[b->col];
+
+    for (long i = 0; i < A->col; ++i) {
+        arr[i] = A->data[row1][i] * mul;
+    }
+
+    for (long i = 0; i < b->col; ++i) {
+        arr_b[i] = b->data[row1][i] * mul;
+    }
+
+    for (long i = 0; i < A->col; ++i) {
+        A->data[row2][i] -= arr[i];
+    }
+
+    for (long i = 0; i < b->col; ++i) {
+        b->data[row2][i] -= arr_b[i];
+    }
+}
+
+static void sub_row_piv_rref(matrix *A, long row1, long row2, long piv) {
     long double mul = A->data[row2][piv] / A->data[row1][piv];
     long double arr[A->col];
 
@@ -54,6 +76,29 @@ static void sub_row_piv(matrix *A, long row1, long row2, long piv) {
 
     for (long i = 0; i < A->col; ++i) {
         A->data[row2][i] -= arr[i];
+    }
+}
+
+static void sub_row_piv_Ab(matrix *A, long row1, long row2, long piv,
+                           matrix *b) {
+    long double mul = A->data[row2][piv] / A->data[row1][piv];
+    long double arr[A->col];
+    long double arr_b[b->col];
+
+    for (long i = 0; i < A->col; ++i) {
+        arr[i] = A->data[row1][i] * mul;
+    }
+
+    for (long i = 0; i < b->col; ++i) {
+        arr_b[i] = b->data[row1][i] * mul;
+    }
+
+    for (long i = 0; i < A->col; ++i) {
+        A->data[row2][i] -= arr[i];
+    }
+
+    for (long i = 0; i < b->col; ++i) {
+        b->data[row2][i] -= arr_b[i];
     }
 }
 
@@ -103,7 +148,7 @@ matrix *rref(matrix *A) {
 
         for (long k = i + 1; k < A->row; ++k) {
             if (A->data[k][j] != 0) {
-                sub_row(A, i, k);
+                sub_row_rref(A, i, k);
             }
 
             if (trace) {
@@ -181,14 +226,166 @@ matrix *rref(matrix *A) {
         }
 
         for (long j = 0; j < i; ++j) {
-            sub_row_piv(new, i, j, curr_piv_col);
+            sub_row_piv_rref(new, i, j, curr_piv_col);
         }
 
         for (long j = i + 1; j < new->row; ++j) {
-            sub_row_piv(new, i, j, curr_piv_col);
+            sub_row_piv_rref(new, i, j, curr_piv_col);
         }
     }
 
-    mat_del(A);
+    return new;
+}
+
+// A * x = b
+matrix *solve(matrix *A, matrix *b) {
+    // Doing row swap if pivot is 0
+    bool trace = false;
+
+    // long dim = (A->row < A->col) ? A->row : A->col;
+    for (long i = 0, j = 0; i < A->row && j < A->col;) {
+        while (is_zero_col(A, j)) {
+            j++;
+
+            if (j == A->col) {
+                break;
+            }
+        }
+
+        if (j == A->col) {
+            break;
+        }
+
+        // At this point it is guaranteed that matrix is non-zero
+        // Also, we have our first non-zero column
+
+        // Swapping the rows to get a non-zero pivot if it exists
+        if (A->data[i][j] == 0) {
+            long k = 0;
+            for (k = i + 1; k < A->row; ++k) {
+                if (A->data[k][j] != 0) {
+                    break;
+                }
+            }
+
+            // Break the elemination if no non-zero pivot exists
+            if (k == A->row) {
+                break;
+            }
+
+            swap_rows(A, k, i);
+            swap_rows(b, k, i);
+        }
+
+        // At this point it is guaranteed that pivot is non-zero
+        // So we elemination matrix to make the pivot 1
+        row_scalar_mul(b, i, 1 / A->data[i][j]);
+        row_scalar_mul(A, i, 1 / A->data[i][j]);
+
+        for (long k = i + 1; k < A->row; ++k) {
+            if (A->data[k][j] != 0) {
+                sub_row_Ab(A, i, k, b);
+            }
+
+            if (trace) {
+                mat_print(A);
+                printf("\n");
+            }
+        }
+
+        i++;
+        j++;
+    }
+
+    // At this point we are done with forward elemination
+
+    // >>> Rearranging the zero rows in the elemination matrix
+    //
+
+    long zero_row[A->row + 1];
+    long non_zero_row[A->row + 1];
+
+    for (long i = 0; i < A->row + 1; ++i) {
+        zero_row[i] = non_zero_row[i] = -1;
+    }
+
+    for (long i = 0, j = 0, k = 0; k < A->row; ++k) {
+        if (is_zero_row(A, k)) {
+            zero_row[i] = k;
+            i++;
+        } else {
+            non_zero_row[j] = k;
+            j++;
+        }
+    }
+
+    matrix *new_A = zeros(A->row, A->col);
+    matrix *new_b = zeros(b->row, b->col);
+    {
+        long i = 0;
+        for (i = 0; non_zero_row[i] != -1; ++i) {
+            // copy the row
+            for (long j = 0; j < A->col; ++j) {
+                new_A->data[i][j] = A->data[non_zero_row[i]][j];
+            }
+
+            for (long j = 0; j < b->col; ++j) {
+                new_b->data[i][j] = b->data[non_zero_row[i]][j];
+            }
+        }
+
+        for (; zero_row[i] != -1; ++i) {
+            // copy the row
+            for (long j = 0; j < A->col; ++j) {
+                new_A->data[i][j] = A->data[zero_row[i]][j];
+            }
+
+            for (long j = 0; j < b->col; ++j) {
+                new_b->data[i][j] = b->data[zero_row[i]][j];
+            }
+        }
+    }
+
+    //
+    // <<< Rearranging the zero rows in the elemination matrix
+
+    // Continuing elemination for rref
+    long curr_piv_row = -1;
+    long curr_piv_col = -1;
+    for (long i = 0; i < new_A->row; ++i) {
+        if (is_zero_row(new_A, i)) {
+            break;
+        }
+
+        for (long j = 0; j < new_A->col; ++j) {
+            if (new_A->data[i][j] != 0) {
+                if (i > curr_piv_row && j > curr_piv_col) {
+                    curr_piv_row = i;
+                    curr_piv_col = j;
+                }
+            }
+        }
+
+        if (A->data[curr_piv_row][curr_piv_col] != 1) {
+            row_scalar_mul(new_b, i,
+                           1 / new_A->data[curr_piv_row][curr_piv_col]);
+            row_scalar_mul(new_A, i,
+                           1 / new_A->data[curr_piv_row][curr_piv_col]);
+        }
+
+        for (long j = 0; j < i; ++j) {
+            sub_row_piv_Ab(new_A, i, j, curr_piv_col, new_b);
+        }
+
+        for (long j = i + 1; j < new_A->row; ++j) {
+            sub_row_piv_Ab(new_A, i, j, curr_piv_col, new_b);
+        }
+    }
+
+    matrix *new = aug(new_A, new_b);
+
+    mat_del(new_A);
+    mat_del(new_b);
+
     return new;
 }

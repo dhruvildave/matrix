@@ -48,6 +48,9 @@ matrix *transpose(matrix *mat);
 // Reduced Row Echelon Form
 matrix *rref(matrix *A);
 
+// A * x = b
+matrix *solve(matrix *A, matrix *b);
+
 // Return a matrix of ones
 matrix *ones(long row, long col);
 
