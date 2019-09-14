@@ -44,6 +44,7 @@ static void sub_row_rref(matrix *A, long row1, long row2) {
     }
 }
 
+// row2 - row1 simultaneously in A and b
 static void sub_row_Ab(matrix *A, long row1, long row2, matrix *b) {
     long double mul = A->data[row2][row1] / A->data[row1][row1];
     long double arr[A->col];
