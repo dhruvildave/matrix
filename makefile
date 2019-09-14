@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -g -Wall -Wpedantic -Wextra -std=c11
 
 main.out: main.o matrix.o rref.o
-	$(CC) $(CFLAGS) *.o -o main.out -lm
+	$(CC) $(CFLAGS) *.o -o main.out
 
 main.o: main.c matrix.h
 	$(CC) $(CFLAGS) -c main.c

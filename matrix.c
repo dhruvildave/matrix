@@ -67,44 +67,11 @@ void transpose(matrix *mat) {
     mat->col = temp;
 }
 
-// Checks if all the values are integers or floats
-static bool is_integer_matrix(matrix *mat) {
-    if (mat->row_major) {
-        for (long i = 0; i < mat->row; ++i) {
-            for (long j = 0; j < mat->col; ++j) {
-                if (mat->data[i][j] - floorl(mat->data[i][j]) != 0) {
-                    return false;
-                }
-            }
-        }
-    } else {
-        for (long i = 0; i < mat->row; ++i) {
-            for (long j = 0; j < mat->col; ++j) {
-                if (mat->data[j][i] - floorl(mat->data[j][i]) != 0) {
-                    return false;
-                }
-            }
-        }
-    }
-
-    return true;
-}
-
 // Matrix print
 void mat_print(matrix *mat) {
     // printf("\n");
     if (mat->row_major) {
         // printf("\n");
-        if (is_integer_matrix(mat)) {
-            for (long i = 0; i < mat->row; ++i) {
-                for (long j = 0; j < mat->col; ++j) {
-                    printf("\t%.0Lf", mat->data[i][j]);
-                }
-                printf("\n");
-            }
-            return;
-        }
-
         for (long i = 0; i < mat->row; ++i) {
             for (long j = 0; j < mat->col; ++j) {
                 printf("\t%.2Lf", mat->data[i][j]);
@@ -113,16 +80,6 @@ void mat_print(matrix *mat) {
         }
     } else {
         // printf("\n");
-        if (is_integer_matrix(mat)) {
-            for (long i = 0; i < mat->row; ++i) {
-                for (long j = 0; j < mat->col; ++j) {
-                    printf("\t%.0Lf", mat->data[j][i]);
-                }
-                printf("\n");
-            }
-            return;
-        }
-
         for (long i = 0; i < mat->row; ++i) {
             for (long j = 0; j < mat->col; ++j) {
                 printf("\t%.2Lf", mat->data[j][i]);
