@@ -10,22 +10,14 @@
 static void mat_ctor(matrix *mat) {
     mat->row = 0;
     mat->col = 0;
-    mat->row_major = true;
     mat->data = NULL;
 }
 
 // Matrix destructor
 static void mat_dtor(matrix *mat) {
-    if (mat->row_major) {
-        for (long i = 0; i < mat->row; ++i) {
-            free(mat->data[i]);
-            mat->data[i] = NULL;
-        }
-    } else {
-        for (long i = 0; i < mat->col; ++i) {
-            free(mat->data[i]);
-            mat->data[i] = NULL;
-        }
+    for (long i = 0; i < mat->row; ++i) {
+        free(mat->data[i]);
+        mat->data[i] = NULL;
     }
 
     free(mat->data);
@@ -60,32 +52,44 @@ void mat_alloc(matrix *mat) {
 }
 
 // Transpose the matrix
-void transpose(matrix *mat) {
-    mat->row_major = !(mat->row_major);
-    long temp = mat->row;
-    mat->row = mat->col;
-    mat->col = temp;
+matrix *transpose(matrix *mat) {
+    matrix *new = zeros(mat->col, mat->row);
+    for (long i = 0; i < mat->row; ++i) {
+        for (long j = 0; j < mat->col; ++j) {
+            new->data[j][i] = mat->data[i][j];
+        }
+    }
+
+    return new;
 }
 
 // Matrix print
 void mat_print(matrix *mat) {
     // printf("\n");
-    if (mat->row_major) {
-        // printf("\n");
-        for (long i = 0; i < mat->row; ++i) {
-            for (long j = 0; j < mat->col; ++j) {
-                printf("\t%.2Lf", mat->data[i][j]);
-            }
-            printf("\n");
+    for (long i = 0; i < mat->row; ++i) {
+        for (long j = 0; j < mat->col; ++j) {
+            printf("\t%.2Lf", mat->data[i][j]);
         }
-    } else {
-        // printf("\n");
-        for (long i = 0; i < mat->row; ++i) {
-            for (long j = 0; j < mat->col; ++j) {
-                printf("\t%.2Lf", mat->data[j][i]);
-            }
-            printf("\n");
+        printf("\n");
+    }
+}
+
+// Print augmented matrix
+void mat_print_aug(matrix *mat, long col) {
+    // printf("\n");
+    for (long i = 0; i < mat->row; ++i) {
+        long j = 0;
+        for (j = 0; j < col; ++j) {
+            printf("\t%.2Lf", mat->data[i][j]);
         }
+
+        printf("\t|");
+
+        for (; j < mat->col; ++j) {
+            printf("\t%.2Lf", mat->data[i][j]);
+        }
+
+        printf("\n");
     }
 }
 

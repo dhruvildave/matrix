@@ -15,7 +15,6 @@
 #include <string.h>
 
 typedef struct matrix {
-    bool row_major;
     long row;
     long col;
 
@@ -31,6 +30,9 @@ void mat_del(matrix *mat);
 // Matrix pretty print
 void mat_print(matrix *mat);
 
+// Print augmented matrix
+void mat_print_aug(matrix *mat, long col);
+
 // Swap the columns
 void swap_cols(matrix *mat, long col1, long col2);
 
@@ -41,7 +43,7 @@ void swap_rows(matrix *mat, long row1, long row2);
 void mat_input(matrix *mat);
 
 // Transpose the matrix
-void transpose(matrix *mat);
+matrix *transpose(matrix *mat);
 
 // Reduced Row Echelon Form
 matrix *rref(matrix *A);

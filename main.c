@@ -15,16 +15,18 @@ int main(void) {
     matrix *A = mat_init();
     printf("Enter A:\n");
     mat_input(A);
+    matrix *AT = transpose(A);
 
     matrix *b = mat_init();
     printf("Enter b:\n");
     mat_input(b);
 
-    matrix *x = rref(aug(A, b));
-    mat_print(x);
+    matrix *x = rref(aug(AT, b));
+    mat_print_aug(x, AT->col);
 
     mat_del(A);
     mat_del(b);
+    mat_del(AT);
     mat_del(x);
     return 0;
 }
