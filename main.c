@@ -20,8 +20,8 @@ int main(void) {
     printf("Enter b:\n");
     mat_input(b);
 
-    matrix *x = aug(A, b);
-    rref(x);
+    matrix *x = rref(aug(A, b));
+    mat_print(x);
 
     mat_del(A);
     mat_del(b);
