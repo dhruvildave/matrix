@@ -27,7 +27,7 @@ typedef struct pivot_data {
 } pivot_data;
 
 typedef struct aug_mat {
-    matrix *mat;
+    matrix *rref;
     pivot_data *piv;
 } aug_mat;
 
@@ -81,5 +81,11 @@ void piv_del(pivot_data *piv);
 
 // Augmented Matrix deleter
 void aug_del(aug_mat *m);
+
+// Calculate the nullspace of matrix
+matrix *nullspace(aug_mat *mat, long num_aug_col);
+
+bool is_zero_col(matrix *mat, long num);
+bool is_zero_row(matrix *mat, long num);
 
 #endif // MATRIX_H

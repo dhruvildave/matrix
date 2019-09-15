@@ -8,7 +8,7 @@ static void row_scalar_mul(matrix *mat, long num, long double mul) {
     }
 }
 
-static bool is_zero_row(matrix *mat, long num) {
+bool is_zero_row(matrix *mat, long num) {
     assert(num >= 0 && num < mat->row);
     for (long i = 0; i < mat->col; ++i) {
         if (mat->data[num][i] != 0) {
@@ -19,7 +19,7 @@ static bool is_zero_row(matrix *mat, long num) {
     return true;
 }
 
-static bool is_zero_col(matrix *mat, long num) {
+bool is_zero_col(matrix *mat, long num) {
     assert(num < mat->col && num >= 0);
     for (long i = 0; i < mat->row; ++i) {
         if (mat->data[i][num] != 0) {
@@ -399,7 +399,7 @@ aug_mat *solve(matrix *A, matrix *b) {
     }
 
     aug_mat *new = calloc(1, sizeof(aug_mat));
-    new->mat = aug(new_A, new_b);
+    new->rref = aug(new_A, new_b);
     new->piv = piv;
 
     for (long i = 0; i < piv->num_pivots; ++i) {

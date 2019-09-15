@@ -182,7 +182,7 @@ matrix *eye(long row, long col) {
 
 // Return a matrix of zeros
 matrix *zeros(long row, long col) {
-    assert(row > 0 && col > 0);
+    assert(row >= 0 && col >= 0);
     matrix *mat = mat_init();
     mat->row = row;
     mat->col = col;
@@ -192,7 +192,7 @@ matrix *zeros(long row, long col) {
 
 // Return a matrix of ones
 matrix *ones(long row, long col) {
-    assert(row > 0 && col > 0);
+    assert(row >= 0 && col >= 0);
     matrix *mat = mat_init();
     mat->row = row;
     mat->col = col;
@@ -240,7 +240,7 @@ void piv_del(pivot_data *piv) {
 
 // Augmented matrix deleter
 void aug_del(aug_mat *m) {
-    mat_del(m->mat);
+    mat_del(m->rref);
     piv_del(m->piv);
     free(m);
     m = NULL;

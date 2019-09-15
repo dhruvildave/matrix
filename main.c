@@ -21,7 +21,11 @@ int main(void) {
     mat_input(b);
 
     aug_mat *x = solve(A, b);
-    mat_print_aug(x->mat, A->col);
+    // mat_print_aug(x->rref, A->col);
+
+    matrix *p = nullspace(x, b->col);
+    mat_print(p);
+    mat_del(p);
 
     // matrix *x = rref(A);
 
