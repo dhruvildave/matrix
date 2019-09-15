@@ -20,13 +20,13 @@ int main(void) {
     printf("Enter b:\n");
     mat_input(b);
 
-    matrix *x = solve(A, b);
-    mat_print_aug(x, A->col);
+    aug_mat *x = solve(A, b);
+    mat_print_aug(x->mat, A->col);
 
     // matrix *x = rref(A);
 
     mat_del(A);
     mat_del(b);
-    mat_del(x);
+    aug_del(x);
     return 0;
 }

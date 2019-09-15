@@ -239,9 +239,15 @@ matrix *rref(matrix *A) {
 }
 
 // A * x = b
-matrix *solve(matrix *A, matrix *b) {
+aug_mat *solve(matrix *A, matrix *b) {
     // Doing row swap if pivot is 0
     bool trace = false;
+    long num_pivot = 0;
+    long piv_arr[A->col];
+
+    for (long i = 0; i < A->col; ++i) {
+        piv_arr[i] = -1;
+    }
 
     // long dim = (A->row < A->col) ? A->row : A->col;
     for (long i = 0, j = 0; i < A->row && j < A->col;) {
@@ -367,6 +373,8 @@ matrix *solve(matrix *A, matrix *b) {
             }
         }
 
+        piv_arr[num_pivot++] = curr_piv_col;
+
         if (A->data[curr_piv_row][curr_piv_col] != 1) {
             row_scalar_mul(new_b, i,
                            1 / new_A->data[curr_piv_row][curr_piv_col]);
@@ -383,7 +391,21 @@ matrix *solve(matrix *A, matrix *b) {
         }
     }
 
-    matrix *new = aug(new_A, new_b);
+    pivot_data *piv = calloc(1, sizeof(pivot_data));
+    piv->num_pivots = num_pivot;
+    piv->pivot_arr = calloc(num_pivot, sizeof(long));
+    for (long i = 0; i < num_pivot; ++i) {
+        piv->pivot_arr[i] = piv_arr[i];
+    }
+
+    aug_mat *new = calloc(1, sizeof(aug_mat));
+    new->mat = aug(new_A, new_b);
+    new->piv = piv;
+
+    for (long i = 0; i < piv->num_pivots; ++i) {
+        printf("\t%ld", piv->pivot_arr[i]);
+    }
+    printf("\n");
 
     mat_del(new_A);
     mat_del(new_b);

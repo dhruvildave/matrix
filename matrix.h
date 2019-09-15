@@ -21,6 +21,16 @@ typedef struct matrix {
     long double **data;
 } matrix;
 
+typedef struct pivot_data {
+    long num_pivots;
+    long *pivot_arr;
+} pivot_data;
+
+typedef struct aug_mat {
+    matrix *mat;
+    pivot_data *piv;
+} aug_mat;
+
 // Matrix initializer
 matrix *mat_init(void);
 
@@ -42,6 +52,9 @@ void swap_rows(matrix *mat, long row1, long row2);
 // Clean the current memory and user input new matrix
 void mat_input(matrix *mat);
 
+// Matrix copy
+matrix *mat_cp(matrix *mat);
+
 // Transpose the matrix
 matrix *transpose(matrix *mat);
 
@@ -49,7 +62,7 @@ matrix *transpose(matrix *mat);
 matrix *rref(matrix *A);
 
 // A * x = b
-matrix *solve(matrix *A, matrix *b);
+aug_mat *solve(matrix *A, matrix *b);
 
 // Return a matrix of ones
 matrix *ones(long row, long col);
@@ -62,5 +75,11 @@ matrix *eye(long row, long col);
 
 // Return [A b]
 matrix *aug(matrix *A, matrix *b);
+
+// pivotdata deleter
+void piv_del(pivot_data *piv);
+
+// Augmented Matrix deleter
+void aug_del(aug_mat *m);
 
 #endif // MATRIX_H

@@ -93,6 +93,18 @@ void mat_print_aug(matrix *mat, long col) {
     }
 }
 
+// Matrix copy
+matrix *mat_cp(matrix *mat) {
+    matrix *new = zeros(mat->row, mat->col);
+    for (long i = 0; i < mat->row; ++i) {
+        for (long j = 0; j < mat->col; ++j) {
+            new->data[i][j] = mat->data[i][j];
+        }
+    }
+
+    return new;
+}
+
 // Swap the rows
 void swap_rows(matrix *mat, long row1, long row2) {
     assert(row1 >= 0 && row1 < mat->row && row2 >= 0 && row2 < mat->row);
@@ -215,4 +227,21 @@ matrix *aug(matrix *A, matrix *b) {
     }
 
     return aug_mat;
+}
+
+// Pivotdata deleter
+void piv_del(pivot_data *piv) {
+    free(piv->pivot_arr);
+    piv->pivot_arr = NULL;
+    piv->num_pivots = 0;
+    free(piv);
+    piv = NULL;
+}
+
+// Augmented matrix deleter
+void aug_del(aug_mat *m) {
+    mat_del(m->mat);
+    piv_del(m->piv);
+    free(m);
+    m = NULL;
 }
