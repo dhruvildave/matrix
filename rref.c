@@ -39,12 +39,12 @@ static bool is_consistent(aug_mat *mat) {
     for (long i = 0; i < mat->rref->row; i++) {
         if (rowindex[i] != 1) {
             if (is_zero_row(mat->rref, i)) {
-                return false;
+                return true;
             }
         }
     }
 
-    return true;
+    return false;
 }
 
 // A * x = b
