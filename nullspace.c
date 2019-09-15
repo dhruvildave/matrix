@@ -1,5 +1,6 @@
 
 #include "matrix.h"
+#include "util.h"
 
 // drop col num
 static matrix *drop_col(matrix *mat, long num) {

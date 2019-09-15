@@ -4,6 +4,7 @@
 // main.c
 
 #include "matrix.h"
+#include "util.h"
 
 int main(void) {
 #if !defined(__linux__)
@@ -21,13 +22,12 @@ int main(void) {
     mat_input(b);
 
     aug_mat *x = solve(A, b);
-    // mat_print_aug(x->rref, A->col);
+    mat_print_aug(x->rref, A->col);
+    printf("\n");
 
     matrix *p = nullspace(x, b->col);
     mat_print(p);
     mat_del(p);
-
-    // matrix *x = rref(A);
 
     mat_del(A);
     mat_del(b);

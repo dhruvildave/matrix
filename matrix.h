@@ -58,9 +58,6 @@ matrix *mat_cp(matrix *mat);
 // Transpose the matrix
 matrix *transpose(matrix *mat);
 
-// Reduced Row Echelon Form
-matrix *rref(matrix *A);
-
 // A * x = b
 aug_mat *solve(matrix *A, matrix *b);
 
@@ -84,11 +81,5 @@ void aug_del(aug_mat *m);
 
 // Calculate the nullspace of matrix
 matrix *nullspace(aug_mat *mat, long num_aug_col);
-
-bool is_zero_col(matrix *mat, long num);
-bool is_zero_row(matrix *mat, long num);
-
-// Multiply a row by a scalar
-void row_scalar_mul(matrix *mat, long num, long double mul);
 
 #endif // MATRIX_H
