@@ -44,29 +44,6 @@ static void sub_row_rref(matrix *A, long row1, long row2) {
     }
 }
 
-// row2 - row1 simultaneously in A and b
-static void sub_row_Ab(matrix *A, long row1, long row2, matrix *b) {
-    long double mul = A->data[row2][row1] / A->data[row1][row1];
-    long double arr[A->col];
-    long double arr_b[b->col];
-
-    for (long i = 0; i < A->col; ++i) {
-        arr[i] = A->data[row1][i] * mul;
-    }
-
-    for (long i = 0; i < b->col; ++i) {
-        arr_b[i] = b->data[row1][i] * mul;
-    }
-
-    for (long i = 0; i < A->col; ++i) {
-        A->data[row2][i] -= arr[i];
-    }
-
-    for (long i = 0; i < b->col; ++i) {
-        b->data[row2][i] -= arr_b[i];
-    }
-}
-
 static void sub_row_piv_rref(matrix *A, long row1, long row2, long piv) {
     long double mul = A->data[row2][piv] / A->data[row1][piv];
     long double arr[A->col];
@@ -284,14 +261,24 @@ aug_mat *solve(matrix *A, matrix *b) {
             swap_rows(b, k, i);
         }
 
+        if (trace) {
+            mat_print(A);
+            printf("\n");
+        }
+
         // At this point it is guaranteed that pivot is non-zero
         // So we elemination matrix to make the pivot 1
         row_scalar_mul(b, i, 1 / A->data[i][j]);
         row_scalar_mul(A, i, 1 / A->data[i][j]);
 
+        if (trace) {
+            mat_print(A);
+            printf("\n");
+        }
+
         for (long k = i + 1; k < A->row; ++k) {
             if (A->data[k][j] != 0) {
-                sub_row_Ab(A, i, k, b);
+                sub_row_piv_Ab(A, i, k, j, b);
             }
 
             if (trace) {
