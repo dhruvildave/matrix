@@ -40,13 +40,13 @@ int main(void) {
     printf("\n");
 
     matrix *p = nullspace(x, b->col);
-    mat_print(p);
+    // mat_print(p);
 
     solution(x, p);
 
     mat_del(A);
     mat_del(b);
     aug_del(x);
-    mat_del(p);
+    // mat_del(p);
     return 0;
 }

@@ -223,10 +223,11 @@ aug_mat *solve(matrix *A, matrix *b) {
     new->rref = aug(new_A, new_b);
     new->piv = piv;
 
+    printf("The pivots are:\n");
     for (long i = 0; i < piv->num_pivots; ++i) {
         printf("\t%ld", piv->pivot_arr[i]);
     }
-    printf("\n");
+    printf("\n\n");
 
     mat_del(new_A);
     mat_del(new_b);
@@ -273,7 +274,7 @@ void solution(aug_mat *mat, matrix *nullmat) {
             printf("x%ld == %.2Lf\n", i, sol[i]);
         }
 
-        printf("Nullspace of the equation is:\n");
+        printf("\n\nNullspace of the equation is:\n");
         mat_print(nullmat);
         return;
     }
@@ -297,7 +298,7 @@ void solution(aug_mat *mat, matrix *nullmat) {
             printf("x%ld == %.2Lf\n", i, sol[i]);
         }
 
-        printf("Nullspace of the equation is:\n");
+        printf("\n\nNullspace of the equation is:\n");
         mat_print(nullmat);
         return;
     }
