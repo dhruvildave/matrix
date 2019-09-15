@@ -59,6 +59,13 @@ matrix *nullspace(aug_mat *mat, long num_aug_col) {
     }
 
     F = drop_zero_rows(F);
+    for (long i = mat->piv->num_pivots - 1; i >= 0; --i) {
+        F = drop_col(F, mat->piv->pivot_arr[i]);
+    }
 
-    return F;
+    if (F->col == 0) {
+        mat_del(F);
+        F = zeros(0, 0);
+        return F;
+    }
 }
