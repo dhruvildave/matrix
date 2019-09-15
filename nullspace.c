@@ -52,6 +52,15 @@ static matrix *drop_zero_rows(matrix *mat) {
     return new;
 }
 
+static void copy_rows(matrix *to, long to_num, matrix *from, long from_num) {
+    assert(to_num >= 0 && to_num < to->row);
+    assert(from_num >= 0 && from_num < from->row);
+    assert(to->col == from->col);
+    for (long i = 0; i < to->col; i++) {
+        to->data[to_num][i] = from->data[from_num][i];
+    }
+}
+
 matrix *nullspace(aug_mat *mat, long num_aug_col) {
     matrix *F = mat_cp(mat->rref);
     for (long i = 0; i < num_aug_col; ++i) {
@@ -68,4 +77,32 @@ matrix *nullspace(aug_mat *mat, long num_aug_col) {
         F = zeros(0, 0);
         return F;
     }
+
+    for (long i = 0; i < F->row; ++i) {
+        row_scalar_mul(F, i, -1);
+    }
+
+    matrix *null_mat = zeros(mat->rref->col - num_aug_col, F->col);
+    matrix *I = eye(mat->rref->col - num_aug_col - F->row, F->col);
+    long trav[null_mat->row];
+    for (long i = 0; i < null_mat->row; ++i) {
+        trav[i] = 0;
+    }
+
+    for (long i = 0; i < mat->piv->num_pivots; i++) {
+        copy_rows(null_mat, mat->piv->pivot_arr[i], F, i);
+        trav[mat->piv->pivot_arr[i]] = 1;
+    }
+
+    for (long i = 0, j = 0; i < null_mat->row; i++) {
+        if (trav[i] == 0) {
+            copy_rows(null_mat, i, I, j);
+            j++;
+        }
+    }
+
+    mat_del(F);
+    mat_del(I);
+
+    return null_mat;
 }

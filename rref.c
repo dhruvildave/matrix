@@ -2,7 +2,7 @@
 #include "matrix.h"
 
 // Multiply a row by a scalar
-static void row_scalar_mul(matrix *mat, long num, long double mul) {
+void row_scalar_mul(matrix *mat, long num, long double mul) {
     for (long i = 0; i < mat->col; ++i) {
         mat->data[num][i] *= mul;
     }
