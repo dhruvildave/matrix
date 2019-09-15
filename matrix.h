@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Base Structure of Matrix
 typedef struct matrix {
     long row;
     long col;
@@ -21,11 +22,13 @@ typedef struct matrix {
     long double **data;
 } matrix;
 
+// Structure to store pivots of RREF
 typedef struct pivot_data {
     long num_pivots;
     long *pivot_arr;
 } pivot_data;
 
+// Structure to bind RREF and its pivots
 typedef struct aug_mat {
     matrix *rref;
     pivot_data *piv;
@@ -82,6 +85,7 @@ void aug_del(aug_mat *m);
 // Calculate the nullspace of matrix
 matrix *nullspace(aug_mat *mat, long num_aug_col);
 
+// Checks and returns the solution set
 void solution(aug_mat *mat, matrix *nullmat);
 
 #endif // MATRIX_H

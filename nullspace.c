@@ -21,6 +21,7 @@ static matrix *drop_col(matrix *mat, long num) {
     return new;
 }
 
+// Drop all the zero rows
 static matrix *drop_zero_rows(matrix *mat) {
     long arr[mat->row];
     long num = 0;
@@ -53,6 +54,7 @@ static matrix *drop_zero_rows(matrix *mat) {
     return new;
 }
 
+// Copy row from_num from from to to in to_num
 static void copy_rows(matrix *to, long to_num, matrix *from, long from_num) {
     assert(to_num >= 0 && to_num < to->row);
     assert(from_num >= 0 && from_num < from->row);
@@ -62,6 +64,7 @@ static void copy_rows(matrix *to, long to_num, matrix *from, long from_num) {
     }
 }
 
+// Calculate the nullspace for given rref
 matrix *nullspace(aug_mat *mat, long num_aug_col) {
     matrix *F = mat_cp(mat->rref);
     for (long i = 0; i < num_aug_col; ++i) {

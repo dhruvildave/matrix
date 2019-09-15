@@ -1,6 +1,6 @@
 
 // dhruvil
-// Mon 27 May 2019 10:49:37 PM IST
+// Mon 16 Sep 2019 12:48:57 AM IST
 // matrix.c
 
 #include "matrix.h"
@@ -42,6 +42,7 @@ void mat_del(matrix *mat) {
 }
 
 // Matrix allocator
+// Mon 27 May 2019 10:49:37 PM IST
 void mat_alloc(matrix *mat) {
     if (mat->row >= 0 && mat->col >= 0) {
         mat->data = calloc(mat->row, sizeof(long double *));
@@ -140,7 +141,7 @@ void mat_input(matrix *mat) {
     char *eptr = NULL;
     const int NUMBASE = 10;
 
-    printf("Enter row and column seperated by space: ");
+    printf("Enter row and column seperated by space (E.g. 3 3): ");
     fgets(buf, BUFSIZ, stdin);
     rptr = buf;
     mat->row = strtol(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);

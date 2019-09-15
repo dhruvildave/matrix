@@ -9,6 +9,7 @@ void row_scalar_mul(matrix *mat, long num, long double mul) {
     }
 }
 
+// Checks if the row is zero
 bool is_zero_row(matrix *mat, long num) {
     assert(num >= 0 && num < mat->row);
     for (long i = 0; i < mat->col; ++i) {
@@ -20,6 +21,7 @@ bool is_zero_row(matrix *mat, long num) {
     return true;
 }
 
+// Checks if the column is zero
 bool is_zero_col(matrix *mat, long num) {
     assert(num < mat->col && num >= 0);
     for (long i = 0; i < mat->row; ++i) {

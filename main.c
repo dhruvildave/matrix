@@ -13,12 +13,26 @@ int main(void) {
 
 #endif // __linux__
 
+    printf("::DISCLAIMER::\n");
+    printf("THIS SOFTWARE HAS BEEN HEAVILY TESTED FOR VARIOUS TEST CASES OF "
+           "VARIOUS DIMENSIONS\nPLEASE MAKE SURE TO ENTER THE DIMENSIONS "
+           "CORRECTLY AND LEAVE NO DIMENSION OF ENTRY UNFILLED\nIT MAY LEAD TO "
+           "UNDEFINED BEHAVIOR\n");
+
     matrix *A = mat_init();
-    printf("Enter A:\n");
+    printf("\n\nEnter A:\n");
+    printf("a(11) a(12) ... a(1n)\n");
+    printf(".....................\n");
+    printf("a(n1) a(n2) ... a(nn)\n");
     mat_input(A);
 
     matrix *b = mat_init();
-    printf("Enter b:\n");
+    printf("\n\nEnter b:\n");
+    printf("For solving a system of linear equations,\n");
+    printf("Enter the number of columns of b should be 1\n");
+    printf("b(11) b(12) ... b(1n)\n");
+    printf(".....................\n");
+    printf("b(n1) b(n2) ... b(nn)\n");
     mat_input(b);
 
     aug_mat *x = solve(A, b);

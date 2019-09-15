@@ -2,6 +2,7 @@
 #include "matrix.h"
 #include "util.h"
 
+// row2 - row1 with pivot element as multiplier
 static void sub_row_piv_Ab(matrix *A, long row1, long row2, long piv,
                            matrix *b) {
     long double mul = A->data[row2][piv] / A->data[row1][piv];
@@ -47,9 +48,9 @@ static bool is_consistent(aug_mat *mat) {
     return false;
 }
 
-// A * x = b
+// Solve A * x = b
 aug_mat *solve(matrix *A, matrix *b) {
-    // Doing row swap if pivot is 0
+    assert(A->row == b->row);
     bool trace = false;
     long num_pivot = 0;
     long piv_arr[A->col];
@@ -84,7 +85,7 @@ aug_mat *solve(matrix *A, matrix *b) {
                 }
             }
 
-            // Break the elemination if no non-zero pivot exists
+            // Break the elimination if no non-zero pivot exists
             if (k == A->row) {
                 break;
             }
@@ -99,7 +100,7 @@ aug_mat *solve(matrix *A, matrix *b) {
         }
 
         // At this point it is guaranteed that pivot is non-zero
-        // So we elemination matrix to make the pivot 1
+        // So we elimination matrix to make the pivot 1
         row_scalar_mul(b, i, 1 / A->data[i][j]);
         row_scalar_mul(A, i, 1 / A->data[i][j]);
 
@@ -123,7 +124,7 @@ aug_mat *solve(matrix *A, matrix *b) {
         j++;
     }
 
-    // At this point we are done with forward elemination
+    // At this point we are done with forward elimination
 
     // >>> Rearranging the zero rows in the elemination matrix
     //
@@ -175,7 +176,7 @@ aug_mat *solve(matrix *A, matrix *b) {
     //
     // <<< Rearranging the zero rows in the elemination matrix
 
-    // Continuing elemination for rref
+    // Continuing elimination for rref
     long curr_piv_row = -1;
     long curr_piv_col = -1;
     for (long i = 0; i < new_A->row; ++i) {
@@ -210,6 +211,7 @@ aug_mat *solve(matrix *A, matrix *b) {
         }
     }
 
+    // Storing the pivots
     pivot_data *piv = calloc(1, sizeof(pivot_data));
     piv->num_pivots = num_pivot;
     piv->pivot_arr = calloc(num_pivot, sizeof(long));
@@ -232,6 +234,7 @@ aug_mat *solve(matrix *A, matrix *b) {
     return new;
 }
 
+// Checks and returns the solution set
 void solution(aug_mat *mat, matrix *nullmat) {
     long double sol[mat->rref->col - 1];
     for (long i = 0; i < mat->rref->col - 1; ++i) {
