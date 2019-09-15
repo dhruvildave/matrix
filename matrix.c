@@ -148,6 +148,8 @@ void mat_input(matrix *mat) {
     mat->col = strtol(__strtok_r(rptr, " ", &rptr), &eptr, NUMBASE);
 
     mat_alloc(mat);
+    printf("Enter elements of a particular row in the same row itself or the "
+           "program may exit with Segmentation Fault\n");
 
     // printf("Enter %ld rows and %ld columns:\n", mat->row, mat->col);
     for (long i = 0; i < mat->row; ++i) {
