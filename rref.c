@@ -255,49 +255,49 @@ void solution(aug_mat *mat, matrix *nullmat) {
 
     long rank = mat->piv->num_pivots;
     if (rank == mat->rref->row && rank == mat->rref->col - 1) {
-        printf("\nAx=B has a Unique Solution \n");
-        printf("Xp(particular solution) of the Equation is :\n");
+        printf("\nAx = b has a unique solution\n");
+        printf("Particular solution of the equation is:\n");
         for (long i = 0; i < mat->rref->col - 1; i++) {
-            printf("x%ld %8.2Lf\n", i, sol[i]);
+            printf("x%ld == %.2Lf\n", i, sol[i]);
         }
 
         return;
     }
 
     if (rank == mat->rref->row) {
-        printf("\nAx=b has infinitely many solutions \n");
+        printf("\nAx = b has infinitely many solutions\n");
         for (long i = 0; i < mat->rref->col - 1; i++) {
-            printf("x%ld %8.2Lf\n", i, sol[i]);
+            printf("x%ld == %.2Lf\n", i, sol[i]);
         }
 
-        printf("Xn(nullspace solution) of the equation is :\n");
+        printf("Nullspace of the equation is:\n");
         mat_print(nullmat);
         return;
     }
 
     if (rank == mat->rref->col - 1) {
         if (is_consistent(mat)) {
-            printf("\nAx=B has a Unique Solution\n");
+            printf("\nAx = b has a unique solution\n");
             for (long i = 0; i < mat->rref->col - 1; i++) {
-                printf("x%ld %8.2Lf\n", i, sol[i]);
+                printf("x%ld == %.2Lf\n", i, sol[i]);
             }
         } else {
-            printf("\nAx=B has No Solution\n");
+            printf("\nAx = b has no solution\n");
         }
 
         return;
     }
 
     if (is_consistent(mat)) {
-        printf("\nAx=b has infinitely many solutions\n");
+        printf("\nAx = b has infinitely many solutions\n");
         for (long i = 0; i < mat->rref->col - 1; i++) {
-            printf("x%ld %8.2Lf\n", i, sol[i]);
+            printf("x%ld == %.2Lf\n", i, sol[i]);
         }
 
-        printf("Xn(nullspace solution) of the equation is :\n");
+        printf("Nullspace of the equation is:\n");
         mat_print(nullmat);
         return;
     }
 
-    printf("\nAx=B has No Solution\n");
+    printf("\nAx = b has No Solution\n");
 }
