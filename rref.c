@@ -25,6 +25,28 @@ static void sub_row_piv_Ab(matrix *A, long row1, long row2, long piv,
     }
 }
 
+// checks if zero solution has zero rows
+static bool is_consistent(aug_mat *mat) {
+    long double rowindex[mat->rref->row];
+    for (long i = 0; i < mat->rref->row; ++i) {
+        rowindex[i] = 0;
+    }
+
+    for (long i = 0; i < mat->piv->num_pivots; i++) {
+        rowindex[mat->piv->pivot_arr[i]] = 1;
+    }
+
+    for (long i = 0; i < mat->rref->row; i++) {
+        if (rowindex[i] != 1) {
+            if (is_zero_row(mat->rref, i)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 // A * x = b
 aug_mat *solve(matrix *A, matrix *b) {
     // Doing row swap if pivot is 0
@@ -208,4 +230,74 @@ aug_mat *solve(matrix *A, matrix *b) {
     mat_del(new_b);
 
     return new;
+}
+
+void solution(aug_mat *mat, matrix *nullmat) {
+    long double sol[mat->rref->col - 1];
+    for (long i = 0; i < mat->rref->col - 1; ++i) {
+        sol[i] = 0;
+    }
+
+    for (long i = 0; i < mat->piv->num_pivots; i++) {
+        long zerocolcount = 0;
+        for (long k = 0; k < mat->piv->pivot_arr[i]; k++) {
+            if (is_zero_col(mat->rref, i)) {
+                zerocolcount++;
+            }
+        }
+
+        if (mat->piv->pivot_arr[i] - zerocolcount < mat->rref->row) {
+            sol[mat->piv->pivot_arr[i]] =
+                mat->rref->data[mat->piv->pivot_arr[i] - zerocolcount]
+                               [mat->rref->col - 1];
+        }
+    }
+
+    long rank = mat->piv->num_pivots;
+    if (rank == mat->rref->row && rank == mat->rref->col - 1) {
+        printf("\nAx=B has a Unique Solution \n");
+        printf("Xp(particular solution) of the Equation is :\n");
+        for (long i = 0; i < mat->rref->col - 1; i++) {
+            printf("x%ld %8.2Lf\n", i, sol[i]);
+        }
+
+        return;
+    }
+
+    if (rank == mat->rref->row) {
+        printf("\nAx=b has infinitely many solutions \n");
+        for (long i = 0; i < mat->rref->col - 1; i++) {
+            printf("x%ld %8.2Lf\n", i, sol[i]);
+        }
+
+        printf("Xn(nullspace solution) of the equation is :\n");
+        mat_print(nullmat);
+        return;
+    }
+
+    if (rank == mat->rref->col - 1) {
+        if (is_consistent(mat)) {
+            printf("\nAx=B has a Unique Solution\n");
+            for (long i = 0; i < mat->rref->col - 1; i++) {
+                printf("x%ld %8.2Lf\n", i, sol[i]);
+            }
+        } else {
+            printf("\nAx=B has No Solution\n");
+        }
+
+        return;
+    }
+
+    if (is_consistent(mat)) {
+        printf("\nAx=b has infinitely many solutions\n");
+        for (long i = 0; i < mat->rref->col - 1; i++) {
+            printf("x%ld %8.2Lf\n", i, sol[i]);
+        }
+
+        printf("Xn(nullspace solution) of the equation is :\n");
+        mat_print(nullmat);
+        return;
+    }
+
+    printf("\nAx=B has No Solution\n");
 }

@@ -82,4 +82,6 @@ void aug_del(aug_mat *m);
 // Calculate the nullspace of matrix
 matrix *nullspace(aug_mat *mat, long num_aug_col);
 
+void solution(aug_mat *mat, matrix *nullmat);
+
 #endif // MATRIX_H

@@ -27,10 +27,12 @@ int main(void) {
 
     matrix *p = nullspace(x, b->col);
     mat_print(p);
-    mat_del(p);
+
+    solution(x, p);
 
     mat_del(A);
     mat_del(b);
     aug_del(x);
+    mat_del(p);
     return 0;
 }
