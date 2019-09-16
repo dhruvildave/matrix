@@ -1,0 +1,89 @@
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER:
+#+LATEX_HEADER_EXTRA:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+SUBTITLE: AU1841003
+#+LATEX_COMPILER: pdflatex
+#+DATE: \today
+#+TITLE: Solving System of Linear Equations
+#+AUTHOR: Dhruvil Dave
+
+* Understanding the code structure
+
+This code is divided into the following source code files:
+- main.c
+- matrix.c
+- util.c
+- rref.c
+- nullspace.c
+
+The header files are:
+- matrix.h
+- util.h
+
+Additional files are:
+- LICENSE
+- makefile
+
+** To build the code and run
+
+#+BEGIN_SRC bash
+make
+./main.out
+#+END_SRC
+
+** Program flow
+The main contents of each file are as follows:
+   - Contains the main driver code
+   - The main function first asks the user to input the dimensions and the matrices A and b.
+   - The main function then calls the /solve/ function defined in *rref.c* which returns a structure /aug mat/ which is defined in *matrix.h* which returns the Reduced Row Echelon Form of matrix A and values of the pivots.
+   - Then we calculate the nullspace of the matrix by using the results returned in the above step. This is done by the nullspace function defined under *nullspace.c*.
+   - We can use these results to determine the nature of the solution by using the solution function defined in *rref.c*.
+
+#+LATEX: \newpage
+** Sample Input and Output
+#+BEGIN_SRC bash
+Enter A:
+a(11) a(12) ... a(1n)
+.....................
+a(n1) a(n2) ... a(nn)
+Enter row and column seperated by space (E.g. 3 3): 3 4
+Enter elements of a particular row in the same row itself or the program may exit
+with Segmentation Fault
+1 2 2 2
+2 4 6 8
+3 6 8 10
+
+
+Enter b:
+For solving a system of linear equations,
+Enter the number of columns of b should be 1
+b(11) b(12) ... b(1n)
+.....................
+b(n1) b(n2) ... b(nn)
+Enter row and column seperated by space (E.g. 3 3): 3 1
+Enter elements of a particular row in the same row itself or the program may exit
+with Segmentation Fault
+5
+4
+3
+The pivots are:
+	0	2
+
+	1.00	2.00	0.00	-2.00	|	11.00
+	0.00	0.00	1.00	2.00	|	-3.00
+	0.00	0.00	0.00	0.00	|	-6.00
+
+
+
+Nullspace of the equation is:
+	-2.00	2.00
+	1.00	0.00
+	-0.00	-2.00
+	0.00	1.00
+
+Ax = b has No Solution
+
+#+END_SRC
