@@ -245,7 +245,7 @@ void solution(aug_mat *mat, matrix *nullmat) {
     for (long i = 0; i < mat->piv->num_pivots; i++) {
         long zerocolcount = 0;
         for (long k = 0; k < mat->piv->pivot_arr[i]; k++) {
-            if (is_zero_col(mat->rref, i)) {
+            if (is_zero_col(mat->rref, k)) {
                 zerocolcount++;
             }
         }
@@ -255,6 +255,12 @@ void solution(aug_mat *mat, matrix *nullmat) {
                 mat->rref->data[mat->piv->pivot_arr[i] - zerocolcount]
                                [mat->rref->col - 1];
         }
+    }
+
+    printf("\n\nNullspace of the equation is:\n");
+    mat_print(nullmat);
+    if (nullmat->row == 0 && nullmat->col == 0) {
+        printf("Only zero vector as a nullspace\n");
     }
 
     long rank = mat->piv->num_pivots;
@@ -274,8 +280,6 @@ void solution(aug_mat *mat, matrix *nullmat) {
             printf("x%ld == %.2Lf\n", i, sol[i]);
         }
 
-        printf("\n\nNullspace of the equation is:\n");
-        mat_print(nullmat);
         return;
     }
 
@@ -298,8 +302,6 @@ void solution(aug_mat *mat, matrix *nullmat) {
             printf("x%ld == %.2Lf\n", i, sol[i]);
         }
 
-        printf("\n\nNullspace of the equation is:\n");
-        mat_print(nullmat);
         return;
     }
 
