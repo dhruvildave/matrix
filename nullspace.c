@@ -78,7 +78,7 @@ matrix *nullspace(aug_mat *mat, long num_aug_col) {
 
     if (F->col == 0) {
         mat_del(F);
-        F = zeros(0, 0);
+        F = zeros(1, 1);
         return F;
     }
 

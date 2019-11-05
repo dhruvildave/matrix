@@ -40,12 +40,12 @@ static bool is_consistent(aug_mat *mat) {
     for (long i = 0; i < mat->rref->row; i++) {
         if (rowindex[i] != 1) {
             if (is_zero_row(mat->rref, i)) {
-                return true;
+                return false;
             }
         }
     }
 
-    return false;
+    return true;
 }
 
 // Solve A * x = b
@@ -223,11 +223,11 @@ aug_mat *solve(matrix *A, matrix *b) {
     new->rref = aug(new_A, new_b);
     new->piv = piv;
 
-    printf("The pivots are:\n");
-    for (long i = 0; i < piv->num_pivots; ++i) {
-        printf("\t%ld", piv->pivot_arr[i]);
-    }
-    printf("\n\n");
+    // printf("The pivots are:\n");
+    // for (long i = 0; i < piv->num_pivots; ++i) {
+    //     printf("\t%ld", piv->pivot_arr[i]);
+    // }
+    // printf("\n\n");
 
     mat_del(new_A);
     mat_del(new_b);

@@ -88,4 +88,7 @@ matrix *nullspace(aug_mat *mat, long num_aug_col);
 // Checks and returns the solution set
 void solution(aug_mat *mat, matrix *nullmat);
 
+// Calculates linear regression coefficients
+matrix *lin_reg(matrix *mat);
+
 #endif // MATRIX_H

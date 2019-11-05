@@ -69,7 +69,7 @@ void mat_print(matrix *mat) {
     // printf("\n");
     for (long i = 0; i < mat->row; ++i) {
         for (long j = 0; j < mat->col; ++j) {
-            printf("\t%.2Lf", mat->data[i][j]);
+            printf("\t%.8Lf", mat->data[i][j]);
         }
         printf("\n");
     }
