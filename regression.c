@@ -66,10 +66,11 @@ matrix *lin_reg(matrix *mat) {
     matrix *mulAt = mat_mul(inv, At);
     mat_del(inv);
 
+    mat_del(At);
+
     matrix *final = mat_mul(mulAt, b);
 
     mat_del(mulAt);
-    mat_del(At);
     mat_del(A);
     mat_del(b);
 
