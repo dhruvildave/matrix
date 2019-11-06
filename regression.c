@@ -37,7 +37,7 @@ static matrix *mat_inv(matrix *mat) {
 }
 
 matrix *lin_reg(matrix *mat) {
-    matrix *A = zeros(mat->row, (mat->col - 1) * 2 + 1);
+    matrix *A = zeros(mat->row, mat->col);
     matrix *b = zeros(mat->row, 1);
 
     for (long i = 0, j = mat->col - 1; i < mat->row; ++i) {
@@ -51,11 +51,11 @@ matrix *lin_reg(matrix *mat) {
         }
     }
 
-    for (long i = 0; i < mat->row; ++i) {
-        for (long j = 0; j < mat->col; ++j) {
-            A->data[i][mat->col + j] = mat->data[i][j] * mat->data[i][j];
-        }
-    }
+    // for (long i = 0; i < mat->row; ++i) {
+    //     for (long j = 0; j < mat->col; ++j) {
+    //         A->data[i][mat->col + j] = mat->data[i][j] * mat->data[i][j];
+    //     }
+    // }
 
     matrix *At = transpose(A);
     matrix *mul = mat_mul(At, A);
@@ -68,11 +68,10 @@ matrix *lin_reg(matrix *mat) {
 
     matrix *final = mat_mul(mulAt, b);
 
+    mat_del(mulAt);
+    mat_del(At);
     mat_del(A);
     mat_del(b);
-    mat_del(At);
-
-    mat_del(mulAt);
 
     return final;
 }
