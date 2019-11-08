@@ -14,7 +14,6 @@ def f(x: np.ndarray) -> np.ndarray:
 def main() -> None:
     ds = pd.read_csv('in.txt')
     plt.scatter(ds.iloc[:, 0], ds.iloc[:, 1])
-    print(ds)
     x = np.linspace(0, 200, 1000)
     y = f(x)
     plt.plot(x, y, '--', color='orange', label='Least Squares fit')
