@@ -44,7 +44,7 @@ The main contents of each file are as follows:
 
 #+LATEX: \newpage
 ** Sample Input and Output
-#+BEGIN_SRC bash
+#+BEGIN_SRC text
 Enter A:
 a(11) a(12) ... a(1n)
 .....................
